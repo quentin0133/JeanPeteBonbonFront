@@ -13,7 +13,7 @@
                 name="hs-table-with-pagination-search"
                 id="hs-table-with-pagination-search"
                 title="Rechercher un élément"
-                class="py-2 px-3 ps-9 block w-full border-2 border-gray-100 rounded-lg text-md focus:z-10 focus:border-blue-400 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                class="py-2 px-3 ps-9 block w-full outline outline-2 outline-gray-100 rounded-lg text-md focus:z-10 focus:outline-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
                 placeholder="Rechercher..."
               />
               <div
@@ -67,7 +67,8 @@
                         title="Sélectionner toutes les éléments"
                         class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                         [checked]="
-                          idSchedulesChecked.length == schedules.length && schedules.length > 0
+                          idSchedulesChecked.length == schedules.length &&
+                          schedules.length > 0
                         "
                         [disabled]="schedules.length === 0"
                         (change)="onChangeAllCheckbox($event)"
