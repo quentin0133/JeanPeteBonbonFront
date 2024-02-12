@@ -67,8 +67,9 @@
                         title="Sélectionner toutes les éléments"
                         class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                         [checked]="
-                          idSchedulesChecked.length == schedules.length - 1
+                          idSchedulesChecked.length == schedules.length && schedules.length > 0
                         "
+                        [disabled]="schedules.length === 0"
                         (change)="onChangeAllCheckbox($event)"
                       />
                       <label
