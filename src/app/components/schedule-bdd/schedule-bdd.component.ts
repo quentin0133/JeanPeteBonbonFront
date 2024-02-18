@@ -1,22 +1,27 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule.service';
 
 @Component({
   selector: 'app-schedule-bdd',
   templateUrl: './schedule-bdd.component.html',
-  styleUrls: ['./schedule-bdd.component.css'],
+  styleUrls: ['./schedule-bdd.component.css']
 })
 export class ScheduleBDDComponent {
   checkboxAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   schedules: Schedule[];
   idSchedulesChecked: (number | undefined)[];
-  isAlertDelete: boolean = false;
+
+  isAlertAdd: boolean;
+  isAlertDelete: boolean;
 
   constructor(private scheduleService: ScheduleService) {
     this.schedules = this.scheduleService.findAll();
     this.idSchedulesChecked = [];
+
+    this.isAlertAdd = false;
+    this.isAlertDelete = false;
   }
 
   onChangeAllCheckbox(event: Event): void {
@@ -29,6 +34,14 @@ export class ScheduleBDDComponent {
     // @ts-ignore
     if (event.target?.checked) this.addScheduleSelected(id);
     else this.removeScheduleSelected(id);
+  }
+
+  onWantAdd(): void {
+    this.isAlertAdd = true;
+  }
+
+  onCancelAdd(): void {
+    this.isAlertAdd = false;
   }
 
   onWantDelete(id: number | undefined): void {

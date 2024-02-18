@@ -1,0 +1,18 @@
+<div class="border-2 border-gray-300 rounded-lg">
+  <mat-calendar
+    #calendar
+    class="border-b-2 border-gray-100"
+    [dateClass]="getSelectedDates()"
+    [minDate]="getToday()"
+    (selectedChange)="onSelectDate($event, calendar)"
+  >
+  </mat-calendar>
+  <div class="flex justify-end mx-4 my-2">
+    <button
+      class="text-white bg-gray-500 hover:bg-gray-600 rounded-md px-4 py-2"
+      (click)="onClearButton(calendar)"
+    >
+      Rénitialiser
+    </button>
+  </div>
+</div>

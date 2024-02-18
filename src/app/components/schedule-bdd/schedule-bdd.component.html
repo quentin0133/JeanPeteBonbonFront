@@ -6,7 +6,7 @@
           class="border rounded-lg divide-y divide-gray-200 dark:border-gray-700 dark:divide-gray-700"
         >
           <div class="flex gap-x-5 py-3 px-4">
-            <div class="relative max-w-xs">
+            <div class="relative grow">
               <label class="sr-only">Rechercher</label>
               <input
                 type="text"
@@ -36,9 +36,17 @@
                 </svg>
               </div>
             </div>
+            <button
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+              href="#"
+              (click)="onWantAdd()"
+            >
+              Ajouter un évènement
+            </button>
             <ng-container *ngIf="idSchedulesChecked.length > 0">
               <button
-                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                type="button"
+                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                 href="#"
                 (click)="onWantDeleteSelected()"
               >
@@ -230,10 +238,13 @@
   </div>
 </div>
 <div
-  class="hs-overlay w-full h-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto"
-  [class.hidden]="!isAlertDelete"
-  [class.open]="isAlertDelete"
+  class="hs-overlay w-full h-full fixed top-0 start-0 overflow-x-hidden overflow-y-auto"
+  [ngClass]="isAlertDelete ? 'open z-[80]' : 'z-[-10]'"
 >
+  <div
+    class="w-full h-full absolute z-[-10] bg-gray-800 opacity-65"
+    [hidden]="!isAlertDelete"
+  ></div>
   <div
     class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all md:max-w-2xl md:w-full m-3 md:mx-auto"
   >
@@ -306,7 +317,7 @@
         class="flex justify-end items-center gap-x-2 py-3 px-4 bg-gray-50 border-t dark:bg-gray-800 dark:border-gray-700"
       >
         <button
-          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
           href="#"
           (click)="onDeleteSelected()"
         >
@@ -320,6 +331,59 @@
         >
           Annuler
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="hs-overlay w-full h-full fixed top-0 start-0 overflow-x-hidden overflow-y-auto"
+  [ngClass]="isAlertAdd ? 'open z-[80]' : 'z-[-10]'"
+>
+  <div
+    class="w-full h-full absolute z-[-10] bg-gray-800 opacity-65"
+    [hidden]="!isAlertAdd"
+  ></div>
+  <div
+    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-3xl sm:w-full m-3 sm:mx-auto"
+  >
+    <div
+      class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div class="p-4 sm:p-7">
+        <div class="text-center">
+          <h2 class="block text-2xl font-bold text-gray-800 dark:text-gray-200">
+            Ajouter un évènement
+          </h2>
+
+          <!-- Form -->
+          <form class="m-6">
+            <div class="flex justify-between">
+              <app-date-picker class="w-6/12"></app-date-picker>
+              <app-time-picker class="w-5/12"></app-time-picker>
+            </div>
+
+            <div class="mt-4">
+              <div class="flex justify-end gap-x-6">
+                <button
+                  type="button"
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-white bg-blue-500 shadow-sm hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                  data-hs-overlay="#hs-danger-alert"
+                >
+                  Ajouter
+                </button>
+                <button
+                  type="button"
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                  data-hs-overlay="#hs-danger-alert"
+                  (click)="onCancelAdd()"
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
       </div>
     </div>
   </div>
