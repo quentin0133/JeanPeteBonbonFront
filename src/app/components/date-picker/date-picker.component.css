@@ -1,4 +1,4 @@
-::ng-deep.selected-date .mat-calendar-body-cell-content  {
+:host ::ng-deep.selected-date .mat-calendar-body-cell-content  {
     background: #5b15ff !important;
     color: white;
 }

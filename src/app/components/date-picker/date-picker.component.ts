@@ -18,10 +18,7 @@ import {
 })
 export class DatePickerComponent {
   dates: Date[] = [];
-
-  getToday() {
-    return new Date();
-  }
+  today: Date = new Date();
 
   getSelectedDates() {
     return (event: Date): MatCalendarCellCssClasses => {

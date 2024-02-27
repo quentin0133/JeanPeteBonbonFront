@@ -3,7 +3,7 @@
     #calendar
     class="border-b-2 border-gray-100"
     [dateClass]="getSelectedDates()"
-    [minDate]="getToday()"
+    [minDate]="today"
     (selectedChange)="onSelectDate($event, calendar)"
   >
   </mat-calendar>
