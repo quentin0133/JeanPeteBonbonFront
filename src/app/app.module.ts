@@ -31,6 +31,7 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
 import { TimePickerComponent } from './components/time-picker/time-picker.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { TimePickerComponent } from './components/time-picker/time-picker.compon
     ScheduleBDDComponent,
     DatePickerComponent,
     TimePickerComponent,
+    TruncatePipe,
   ],
   imports: [
     BrowserModule,

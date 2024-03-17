@@ -64,6 +64,7 @@
           <div class="overflow-hidden">
             <table
               class="min-w-full text-center divide-y divide-gray-200 dark:divide-gray-700"
+              aria-label="table showing all the schedules that can be managed"
             >
               <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
@@ -139,9 +140,9 @@
                     {{ schedule.id }}
                   </td>
                   <td
-                    class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"
+                    class="px-6 py-4 text-md text-gray-800 dark:text-gray-200"
                   >
-                    {{ schedule.message }}
+                    {{ schedule.message | truncate:92}}
                   </td>
                   <td
                     class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"

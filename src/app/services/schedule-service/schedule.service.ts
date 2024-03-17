@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Schedule } from '../models/schedule';
+import { Schedule } from '../../models/schedule';
 import { HotToastService } from '@ngneat/hot-toast';
 
 @Injectable({
@@ -64,21 +64,9 @@ export class ScheduleService {
     {
       id: 10,
       version: 0,
-      message: "N'oublie pas ton repas, maman :)",
+      message: "Bonjour tout le monde ! Alors là, je suis en train de vivre une expérience totalement surréaliste. Imaginez un peu : je suis assis dans ma cuisine, en train de déguster un café décaféiné, parce que, vous savez, j'ai besoin de toute cette énergie en moins pour affronter ma journée de procrastination. Et devinez quoi ? Je réalise que je suis en train de grignoter des biscuits sans gluten, mais je n'ai même pas d'intolérance au gluten. Juste pour être tendance, vous comprenez. Ah, la vie est pleine de paradoxes délicieux ! En tout cas, je suis là, à jongler entre le chaos de mes choix alimentaires et l'absurdité de mon existence. Bonne journée à vous tous, que vos aventures soient aussi étranges et palpitantes que les miennes !",
       dateTime: new Date(),
-    },
-    {
-      id: 11,
-      version: 0,
-      message: "N'oublie pas ton repas, maman :)",
-      dateTime: new Date(),
-    },
-    {
-      id: 12,
-      version: 0,
-      message: "N'oublie pas ton repas, maman :)",
-      dateTime: new Date(),
-    },
+    }
   ];
 
   constructor(private toast: HotToastService) {}
@@ -101,9 +89,9 @@ export class ScheduleService {
 
   delete(id: number | undefined): boolean {
     if (!id) return false
-    var elementToRemove = this.findById(id);
+    let elementToRemove = this.findById(id);
     if (!elementToRemove) return false;
-    var indexElement = this.schedules.indexOf(elementToRemove);
+    let indexElement = this.schedules.indexOf(elementToRemove);
     if (indexElement === -1) return false;
     this.schedules.splice(indexElement, 1);
     return true;

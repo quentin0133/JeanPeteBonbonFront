@@ -1,14 +1,8 @@
 import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
+  Component
 } from '@angular/core';
 import {
-  MatCalendarCellCssClasses,
-  MatDatepicker,
-  MatDatepickerInputEvent,
+  MatCalendarCellCssClasses
 } from '@angular/material/datepicker';
 
 @Component({

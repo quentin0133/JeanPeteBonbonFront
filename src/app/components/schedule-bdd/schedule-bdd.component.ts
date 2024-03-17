@@ -1,6 +1,6 @@
-import { Component, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
-import { ScheduleService } from 'src/app/services/schedule.service';
+import { ScheduleService } from 'src/app/services/schedule-service/schedule.service';
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -45,7 +45,7 @@ export class ScheduleBDDComponent {
   }
 
   onWantDelete(id: number | undefined): void {
-    this.clearScheduleSelected;
+    this.clearScheduleSelected();
     this.addScheduleSelected(id);
     this.isAlertDelete = true;
   }
@@ -85,7 +85,7 @@ export class ScheduleBDDComponent {
   }
 
   deleteSelected(): void {
-    for (var id of this.idSchedulesChecked) {
+    for (let id of this.idSchedulesChecked) {
       if (this.scheduleService.delete(id))
         console.log('Succès de la suppression n°' + id);
       else console.log('Echec de la suppression n°' + id);
