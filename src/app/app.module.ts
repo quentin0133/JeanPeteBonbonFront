@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { LoginComponent } from './components/login/login.component';
 import { TrollMessageBDDComponent } from './components/troll-message-bdd/troll-message-bdd.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { HttpClientModule } from '@angular/common/http';
@@ -31,14 +30,15 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
 import { TimePickerComponent } from './components/time-picker/time-picker.component';
-import { TruncatePipe } from './pipes/truncate.pipe';
+import { EventModalAddComponent } from './components/event-modal-add/event-modal-add.component';
+import { TruncatePipe } from './pipes/truncate/truncate.pipe';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     FooterComponent,
-    LoginComponent,
     TrollMessageBDDComponent,
     PageNotFoundComponent,
     HomeComponent,
@@ -47,6 +47,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     DatePickerComponent,
     TimePickerComponent,
     TruncatePipe,
+    EventModalAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +61,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     MatDatepickerModule,
     MatFormFieldModule,
     NgxMultipleDatesModule,
+    AuthModule,
     FormsModule,
     MatInputModule,
     HttpClientModule,

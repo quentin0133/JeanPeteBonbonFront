@@ -5,13 +5,13 @@ import { ScheduleService } from 'src/app/services/schedule-service/schedule.serv
 @Component({
   selector: 'app-schedule-bdd',
   templateUrl: './schedule-bdd.component.html',
-  styleUrls: ['./schedule-bdd.component.css']
+  styleUrls: ['./schedule-bdd.component.css'],
 })
 export class ScheduleBDDComponent {
   checkboxAllChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   schedules: Schedule[];
-  idSchedulesChecked: (number | undefined)[];
+  idSchedulesChecked: number[];
 
   isAlertAdd: boolean;
   isAlertDelete: boolean;
@@ -30,9 +30,12 @@ export class ScheduleBDDComponent {
     else this.clearScheduleSelected();
   }
 
-  onChangeCheckbox(event: Event, id: number | undefined): void {
-    // @ts-ignore
-    if (event.target?.checked) this.addScheduleSelected(id);
+  isChecked(id: number) {
+    return this.idSchedulesChecked.includes(id);
+  }
+
+  onChangeCheckbox(id: number): void {
+    if (this.isChecked(id)) this.addScheduleSelected(id);
     else this.removeScheduleSelected(id);
   }
 
@@ -40,11 +43,7 @@ export class ScheduleBDDComponent {
     this.isAlertAdd = true;
   }
 
-  onCancelAdd(): void {
-    this.isAlertAdd = false;
-  }
-
-  onWantDelete(id: number | undefined): void {
+  onWantDelete(id: number): void {
     this.clearScheduleSelected();
     this.addScheduleSelected(id);
     this.isAlertDelete = true;
@@ -68,11 +67,11 @@ export class ScheduleBDDComponent {
     this.clearScheduleSelected();
   }
 
-  addScheduleSelected(id: number | undefined): void {
+  addScheduleSelected(id: number): void {
     if (!this.idSchedulesChecked.includes(id)) this.idSchedulesChecked.push(id);
   }
 
-  removeScheduleSelected(id: number | undefined): void {
+  removeScheduleSelected(id: number): void {
     this.idSchedulesChecked.splice(this.idSchedulesChecked.indexOf(id), 1);
   }
 

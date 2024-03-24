@@ -1,9 +1,5 @@
-import {
-  Component
-} from '@angular/core';
-import {
-  MatCalendarCellCssClasses
-} from '@angular/material/datepicker';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-date-picker',
@@ -11,28 +7,35 @@ import {
   styleUrls: ['./date-picker.component.css'],
 })
 export class DatePickerComponent {
-  dates: Date[] = [];
-  today: Date = new Date();
+  @Output()
+  datesChange: EventEmitter<string[]> = new EventEmitter<string[]>();
+
+  dates: string[];
+  today: Date;
+
+  constructor() {
+    this.dates = [];
+    this.today = new Date();
+  }
 
   getSelectedDates() {
-    return (event: Date): MatCalendarCellCssClasses => {
-      const newDate = new Date(event);
-      const highlightDate = this.dates.some(
-        (date) => date.getDate() === newDate.getDate() && date.getMonth() === newDate.getMonth() && date.getFullYear() === newDate.getFullYear()
-      );
-
-      return highlightDate ? 'selected-date' : '';
+    return (event: any): MatCalendarCellCssClasses => {
+      console.log(event);
+      return this.dates.some((date) => date === event.format('YYYY-MM-DD'))
+        ? 'selected-date'
+        : '';
     };
   }
 
   onSelectDate(event: any, calendar: any): void {
-    const newDate = new Date(event._d);
-    const index = this.dates.findIndex(
-      (date) => date.getDate() === newDate.getDate() && date.getMonth() === newDate.getMonth() && date.getFullYear() === newDate.getFullYear()
-    );
+    const newDate: string = event.format('YYYY-MM-DD');
+    const index = this.dates.findIndex((date) => date === newDate);
+
     if (index === -1) this.dates.push(newDate);
     else this.dates.splice(index, 1);
+
     calendar.updateTodaysDate();
+    this.datesChange.emit(this.dates);
   }
 
   onClearButton(calendar: any): void {

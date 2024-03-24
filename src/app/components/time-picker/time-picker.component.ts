@@ -1,31 +1,30 @@
-import { Component } from '@angular/core';
-import {Time} from "@angular/common";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-time-picker',
   templateUrl: './time-picker.component.html',
-  styleUrls: ['./time-picker.component.css']
+  styleUrls: ['./time-picker.component.css'],
 })
 export class TimePickerComponent {
-  times: Time[];
-  value: string;
+  @Output()
+  timesOnChange: EventEmitter<string[]> = new EventEmitter<string[]>();
 
-  constructor() {
-    this.times = [];
-    this.value = new Date().toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'});
-  }
+  times: string[] = [];
+  timeEntry: string = new Date().toLocaleTimeString(navigator.language, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   onClickAddTime(): void {
-    if (!this.value) return;
+    if (!this.timeEntry || this.times.includes(this.timeEntry)) return;
+    this.times.push(this.timeEntry);
+    this.timesOnChange.emit(this.times);
+  }
 
-    let timeString = this.value.split(':');
-    let time = {
-      hours: +timeString[0],
-      minutes: +timeString[1]
-    }
-
-    if (this.times.includes(time)) return;
-
-    this.times.push(time);
+  onClickRemoveTime(index: number): void {
+    if (index < 0 || index >= this.times.length) return;
+    this.times.splice(index, 1);
+    this.timesOnChange.emit(this.times);
   }
 }
