@@ -1,30 +1,43 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Time } from '@angular/common';
+import * as moment from 'moment';
+
+function compareTime(time1: Date, time2: Date): boolean {
+  return time1.getTime() === time2.getTime();
+}
 
 @Component({
   selector: 'app-time-picker',
   templateUrl: './time-picker.component.html',
   styleUrls: ['./time-picker.component.css'],
 })
-export class TimePickerComponent {
+export class TimePickerComponent implements OnInit {
+  @Input()
+  times?: Date[];
   @Output()
-  timesOnChange: EventEmitter<string[]> = new EventEmitter<string[]>();
+  timesChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
 
-  times: string[] = [];
-  timeEntry: string = new Date().toLocaleTimeString(navigator.language, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  times$: Date[] = [];
+  timeEntry: string = moment().format('HH:mm');
+
+  ngOnInit(): void {
+    if (this.times) this.times$ = this.times;
+  }
 
   onClickAddTime(): void {
-    if (!this.timeEntry || this.times.includes(this.timeEntry)) return;
-    this.times.push(this.timeEntry);
-    this.timesOnChange.emit(this.times);
+    let timeEntryDate = moment(this.timeEntry, 'HH:mm').toDate();
+    if (
+      !this.timeEntry ||
+      this.times$.some((time) => compareTime(time, timeEntryDate))
+    )
+      return;
+    console.log(timeEntryDate);
+    this.times$.push(timeEntryDate);
+    this.timesChange.emit(this.times$);
   }
 
   onClickRemoveTime(index: number): void {
-    if (index < 0 || index >= this.times.length) return;
-    this.times.splice(index, 1);
-    this.timesOnChange.emit(this.times);
+    if (index < 0 || index >= this.times$.length) return;
+    this.times$.splice(index, 1);
+    this.timesChange.emit(this.times$);
   }
 }

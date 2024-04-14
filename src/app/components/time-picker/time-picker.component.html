@@ -17,15 +17,15 @@
   >
     <div
       class="bg-white rounded-lg py-2 px-4 relative"
-      *ngFor="let time of times; let i = index"
+      *ngFor="let time of times$; let i = index"
     >
       <button
-        class="text-white bg-red-500 hover:bg-red-600 px-2 rounded-3xl absolute left-4"
+        class="text-white bg-red-500 hover:bg-red-600 px-1.5 rounded-3xl absolute left-4"
         (click)="onClickRemoveTime(i)"
       >
-        -
+        x
       </button>
-      {{ time }}
+      {{ time | date: "HH:mm" }}
     </div>
   </div>
 </div>

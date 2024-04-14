@@ -1,45 +1,53 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatCalendarCellCssClasses } from '@angular/material/datepicker';
 
+function compareDate(date1: Date, date2: Date): boolean {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() === date2.getFullYear()
+  );
+}
+
 @Component({
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.css'],
 })
-export class DatePickerComponent {
+export class DatePickerComponent implements OnInit {
+  @Input()
+  dates?: Date[];
   @Output()
-  datesChange: EventEmitter<string[]> = new EventEmitter<string[]>();
+  datesChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
 
-  dates: string[];
-  today: Date;
+  dates$: Date[] = [];
+  today: Date = new Date();
 
-  constructor() {
-    this.dates = [];
-    this.today = new Date();
+  ngOnInit(): void {
+    if (this.dates) this.dates$ = this.dates;
   }
 
   getSelectedDates() {
     return (event: any): MatCalendarCellCssClasses => {
-      console.log(event);
-      return this.dates.some((date) => date === event.format('YYYY-MM-DD'))
+      return this.dates$.some((date) => compareDate(date, event.toDate()))
         ? 'selected-date'
         : '';
     };
   }
 
   onSelectDate(event: any, calendar: any): void {
-    const newDate: string = event.format('YYYY-MM-DD');
-    const index = this.dates.findIndex((date) => date === newDate);
+    const newDate = event.toDate();
+    const index = this.dates$.findIndex((date) => compareDate(date, newDate));
 
-    if (index === -1) this.dates.push(newDate);
-    else this.dates.splice(index, 1);
+    if (index === -1) this.dates$.push(newDate);
+    else this.dates$.splice(index, 1);
 
     calendar.updateTodaysDate();
-    this.datesChange.emit(this.dates);
+    this.datesChange.emit(this.dates$);
   }
 
   onClearButton(calendar: any): void {
-    this.dates = [];
+    this.dates$ = [];
     calendar.updateTodaysDate();
   }
 }

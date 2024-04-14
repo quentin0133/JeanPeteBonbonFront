@@ -1,6 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 
+function toDate(date: Date, time: Date) {
+  return new Date(
+    `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${time.getHours()}:${time.getMinutes()}`,
+  );
+}
+
+function get2DArrayTo1DArray(arrays: any[][]): any[] {
+  let newArr: any[] = [];
+  arrays.forEach((array, i) => {
+    newArr = newArr.concat(array);
+  });
+  return newArr;
+}
+
 @Component({
   selector: 'app-event-modal-add',
   templateUrl: './event-modal-add.component.html',
@@ -12,58 +26,40 @@ export class EventModalAddComponent implements OnInit {
   @Output()
   isAlertAddChange: EventEmitter<boolean> = new EventEmitter();
 
-  message: string;
+  message: string = '';
 
-  dates$: string[];
-  times$: string[];
-  isAlertAdd$: boolean;
-
-  constructor() {
-    this.message = '';
-    this.dates$ = [];
-    this.times$ = [];
-    this.isAlertAdd$ = false;
-  }
+  dates: Date[] = [];
+  times: Date[] = [];
+  isAlertAdd$: boolean = false;
 
   ngOnInit() {
     if (this.isAlertAdd) this.isAlertAdd$ = this.isAlertAdd;
   }
 
   onSubmit(): void {
-    console.log(this.toSchedule(this.message, this.dates$, this.times$));
+    if (
+      this.dates.length > 0 &&
+      this.times.length > 0 &&
+      this.message.length > 0
+    )
+      console.log(this.toSchedule(this.message, this.dates, this.times));
   }
 
-  toSchedule(message: string, dates: string[], times: string[]): Schedule[] {
-    return this.get2DArrayTo1DArray(
+  toSchedule(message: string, dates: Date[], times: Date[]): Schedule[] {
+    return get2DArrayTo1DArray(
       dates.map((date) =>
         times.map((time) => {
           return {
             message: message,
-            dateTime: new Date(`${date} ${time}`),
+            dateTime: toDate(date, time),
           };
         }),
       ),
     );
   }
 
-  get2DArrayTo1DArray = (arrays: any[][]) => {
-    let newArr: any[] = [];
-    arrays.forEach((array, i) => {
-      newArr = newArr.concat(array[i]);
-    });
-    return newArr;
-  };
-
   onCancel(): void {
     this.isAlertAdd = false;
     this.isAlertAddChange.emit(this.isAlertAdd);
-  }
-
-  setDates($event: string[]) {
-    this.dates$ = $event;
-  }
-
-  setTimes($event: string[]) {
-    this.times$ = $event;
   }
 }
