@@ -7,27 +7,59 @@
     [hidden]="!isAlertAdd"
   ></div>
   <div
-    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-3xl sm:w-full m-3 sm:mx-auto"
+    class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all max-w-3xl sm:w-full
+    m-3 sm:mx-auto"
   >
     <div
       class="bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-4 sm:p-7">
         <div class="text-center">
-          <h2 class="block text-2xl font-bold text-gray-800 dark:text-gray-200">
+          <h2 class="block text-2xl font-extrabold text-gray-800 dark:text-gray-200">
             Ajouter un évènement
           </h2>
 
           <!-- Form -->
-          <form class="m-6">
+          <form class="m-6" [formGroup]="form">
+            <mat-form-field class="w-full">
+              <mat-label>Serveurs</mat-label>
+              <mat-select [multiple]="true" formControlName="serversId" #serversIndex>
+                <mat-select-trigger>
+                  <ng-container *ngFor="let serverSelected of serversSelected; let first = first">
+                    {{(!first ? ', ' : '') + (serverSelected.label)}}
+                  </ng-container>
+                  <ng-container *ngIf="(serversSelected.length || 0) > 1">
+                    <span class="example-additional-selection">
+                      (+{{(serversSelected.length || 0) - 1}} {{serversSelected.length === 2 ? 'autre' : 'autres'}})
+                    </span>
+                  </ng-container>
+                </mat-select-trigger>
+                <ng-container *ngFor="let server of servers; let index = index">
+                  <mat-option [value]="server.id">{{server.label}}</mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+
+            <label for="message" class="block">Message :</label>
+            <textarea
+              id="message"
+              name="message"
+              class="py-2 px-3 ps-4 block w-full outline outline-2 outline-gray-300 rounded-lg text-md focus:z-10 focus:outline-blue-500
+              focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400
+              dark:focus:ring-gray-600 max-h-36 min-h-9 h-9 mb-4 mt-2"
+              placeholder="Mon message..."
+              formControlName="message"
+            ></textarea>
             <div class="flex justify-between">
               <app-date-picker
                 class="w-6/12"
-                [(dates)]="dates"
-              ></app-date-picker>
+                formControlName="dates"
+              >
+                <p>Salut</p>
+              </app-date-picker>
               <app-time-picker
                 class="w-5/12"
-                [(times)]="times"
+                formControlName="times"
               ></app-time-picker>
             </div>
 
@@ -35,15 +67,20 @@
               <div class="flex justify-end gap-x-6">
                 <button
                   type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-white bg-blue-500 shadow-sm hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 text-white bg-blue-500
+                  shadow-sm hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white
+                  dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                   data-hs-overlay="#hs-danger-alert"
+                  [disabled]="!form.valid"
                   (click)="onSubmit()"
                 >
                   Ajouter
                 </button>
                 <button
                   type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-red-500 text-white
+                  shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white
+                  dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                   data-hs-overlay="#hs-danger-alert"
                   (click)="onCancel()"
                 >

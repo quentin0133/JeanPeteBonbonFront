@@ -8,12 +8,13 @@
     <button
       class="rounded-md bg-blue-500 hover:bg-blue-600 text-white text-lg px-2"
       (click)="onClickAddTime()"
+      [disabled]="isDisabled"
     >
       +
     </button>
   </div>
   <div
-    class="flex flex-col space-y-4 h-[19.25rem] overflow-y-auto mt-4 bg-gray-50 p-2"
+    class="flex flex-col space-y-4 h-[24vmax] overflow-y-auto mt-4 bg-gray-50 p-2"
   >
     <div
       class="bg-white rounded-lg py-2 px-4 relative"
@@ -22,6 +23,7 @@
       <button
         class="text-white bg-red-500 hover:bg-red-600 px-1.5 rounded-3xl absolute left-4"
         (click)="onClickRemoveTime(i)"
+        [disabled]="isDisabled"
       >
         x
       </button>

@@ -2,15 +2,16 @@
   <mat-calendar
     #calendar
     class="border-b-2 border-gray-100"
-    [dateClass]="getSelectedDates()"
+    [dateClass]="initDates()"
     [minDate]="today"
-    (selectedChange)="onSelectDate($event, calendar)"
+    (selectedChange)="onClickDate($event)"
   >
   </mat-calendar>
   <div class="flex justify-end mx-4 my-2">
     <button
       class="text-white bg-gray-500 hover:bg-gray-600 rounded-md px-4 py-2"
       (click)="onClearButton(calendar)"
+      [disabled]="isDisabled"
     >
       Rénitialiser
     </button>
