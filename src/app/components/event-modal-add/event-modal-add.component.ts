@@ -1,12 +1,22 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
-import {BotService} from "../../services/bot-service/bot.service";
-import {Server} from "../../models/server";
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {getFormControl, hasControlError, isControlInvalid } from '../tools/reactive-form-tools';
-import {ScheduleService} from "../../services/schedule-service/schedule.service";
+import { Server } from '../../models/server';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  getFormControl,
+  hasControlError,
+  isControlInvalid,
+} from '../tools/reactive-form-tools';
+import { ScheduleService } from '../../services/schedule-service/schedule.service';
+import { BotService } from '../../services/bot-service/bot.service';
+import { forEach } from 'json-server-auth';
 
-function toDate(date: Date, time: Date) {
+function combineDateTime(date: Date, time: Date): Date {
   return new Date(
     `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${time.getHours()}:${time.getMinutes()}`,
   );
@@ -23,7 +33,7 @@ function get2DArrayTo1DArray(arrays: any[][]): any[] {
 @Component({
   selector: 'app-event-modal-add',
   templateUrl: './event-modal-add.component.html',
-  styleUrls: ['./event-modal-add.component.css']
+  styleUrls: ['./event-modal-add.component.css'],
 })
 export class EventModalAddComponent implements OnInit {
   @Input()
@@ -37,15 +47,20 @@ export class EventModalAddComponent implements OnInit {
     id: new FormControl<number>(0),
     version: new FormControl<number>(0),
     serversId: new FormControl<number[]>([], Validators.required),
-    message: new FormControl<string>('', [Validators.required, Validators.maxLength(512)]),
+    message: new FormControl<string>('', [
+      Validators.required,
+      Validators.maxLength(512),
+    ]),
     dates: new FormControl<Date[]>([], [Validators.required]),
-    times: new FormControl<Date[]>([], [Validators.required])
+    times: new FormControl<Date[]>([], [Validators.required]),
   });
 
   isAlertAdd$: boolean = false;
 
   get serversSelected() {
-    return this.servers.filter(server => this.serversId?.value.includes(server.id));
+    return this.servers.filter((server) =>
+      this.serversId?.value.includes(server.id),
+    );
   }
 
   get serversId(): AbstractControl<any, any> | null {
@@ -53,19 +68,22 @@ export class EventModalAddComponent implements OnInit {
   }
 
   get message(): AbstractControl<any, any> | null {
-    return this.form.get('message')
+    return this.form.get('message');
   }
 
   get dates(): AbstractControl<any, any> | null {
-    return this.form.get('dates')
+    return this.form.get('dates');
   }
 
   get times(): AbstractControl<any, any> | null {
-    return this.form.get('times')
+    return this.form.get('times');
   }
 
-  constructor(private botService: BotService, private scheduleService: ScheduleService) {
-    this.servers = botService.findAllServer()
+  constructor(
+    private botService: BotService,
+    private scheduleService: ScheduleService,
+  ) {
+    this.servers = botService.findAllServer();
   }
 
   ngOnInit() {
@@ -74,21 +92,22 @@ export class EventModalAddComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      (this.form.value.id ?
-        this.scheduleService.update(this.form.value) :
-        this.scheduleService.save(this.form.value)).subscribe();
+      (this.form.value.id
+        ? this.scheduleService.update(this.form.value)
+        : this.scheduleService.save(this.form.value)
+      ).subscribe();
       this.close();
     }
   }
 
-  mergeDateAndTime(dates: Date[], times: Date[]): Schedule[] {
-    return get2DArrayTo1DArray(
-      dates.map((date) =>
-        times.map((time) => {
-          return toDate(date, time);
-        }),
-      ),
+  combineArrayDateTime(dates: Date[], times: Date[]): Date[] {
+    let result: Date[] = [];
+    dates.forEach((date) =>
+      times.forEach((time) => {
+        result.push(combineDateTime(date, time));
+      }),
     );
+    return result;
   }
 
   onCancel(): void {
@@ -102,9 +121,9 @@ export class EventModalAddComponent implements OnInit {
   }
 
   getFormControl(name: string) {
-    return getFormControl(this.form, name)
+    return getFormControl(this.form, name);
   }
 
-  hasControlError = hasControlError
-  isControlInvalid = isControlInvalid
+  hasControlError = hasControlError;
+  isControlInvalid = isControlInvalid;
 }
