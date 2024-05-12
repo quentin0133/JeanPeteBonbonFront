@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Schedule } from 'src/app/models/schedule';
 import { Server } from '../../models/server';
 import {
   AbstractControl,
@@ -14,21 +13,6 @@ import {
 } from '../tools/reactive-form-tools';
 import { ScheduleService } from '../../services/schedule-service/schedule.service';
 import { BotService } from '../../services/bot-service/bot.service';
-import { forEach } from 'json-server-auth';
-
-function combineDateTime(date: Date, time: Date): Date {
-  return new Date(
-    `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${time.getHours()}:${time.getMinutes()}`,
-  );
-}
-
-function get2DArrayTo1DArray(arrays: any[][]): any[] {
-  let newArr: any[] = [];
-  arrays.forEach((array, i) => {
-    newArr = newArr.concat(array);
-  });
-  return newArr;
-}
 
 @Component({
   selector: 'app-event-modal-add',
@@ -41,7 +25,7 @@ export class EventModalAddComponent implements OnInit {
   @Output()
   isAlertAddChange: EventEmitter<boolean> = new EventEmitter();
 
-  servers: Server[];
+  servers: Server[] = [];
 
   form: FormGroup = new FormGroup({
     id: new FormControl<number>(0),
@@ -83,7 +67,10 @@ export class EventModalAddComponent implements OnInit {
     private botService: BotService,
     private scheduleService: ScheduleService,
   ) {
-    this.servers = botService.findAllServer();
+    botService.getBot().subscribe({
+      next: (bot) => (this.servers = bot.servers),
+      error: (e) => console.log(e),
+    });
   }
 
   ngOnInit() {
@@ -98,16 +85,6 @@ export class EventModalAddComponent implements OnInit {
       ).subscribe();
       this.close();
     }
-  }
-
-  combineArrayDateTime(dates: Date[], times: Date[]): Date[] {
-    let result: Date[] = [];
-    dates.forEach((date) =>
-      times.forEach((time) => {
-        result.push(combineDateTime(date, time));
-      }),
-    );
-    return result;
   }
 
   onCancel(): void {

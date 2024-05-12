@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Server } from '../../models/server';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Bot } from '../../models/bot';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BotService {
-  constructor() {}
+  private END_POINT = `${environment.API_URL}/bot`;
 
-  findAllServer(): Server[] {
-    return [];
+  constructor(private http: HttpClient) {}
+
+  getBot(): Observable<Bot> {
+    return this.http.get<Bot>(this.END_POINT);
   }
 }

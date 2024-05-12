@@ -1,7 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule-service/schedule.service';
-import {Observable, of} from "rxjs";
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -17,8 +17,8 @@ export class ScheduleBDDComponent {
   isAlertDelete: boolean = false;
 
   constructor(private scheduleService: ScheduleService) {
-    this.schedulesAll = this.scheduleService.findAll()
-    this.schedulesAll.subscribe(schedules => this.schedules = schedules);
+    this.schedulesAll = this.scheduleService.findAll();
+    this.schedulesAll.subscribe((schedules) => (this.schedules = schedules));
   }
 
   onChangeAllCheckbox(event: any): void {
@@ -26,7 +26,7 @@ export class ScheduleBDDComponent {
     else this.clearScheduleSelected();
   }
 
-  isChecked(id: number) : boolean {
+  isChecked(id: number): boolean {
     return this.idSchedulesChecked.includes(id);
   }
 
