@@ -1,7 +1,7 @@
-import { Component, EventEmitter } from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule-service/schedule.service';
-import { Observable, of } from 'rxjs';
+import {Observable, of, scheduled} from 'rxjs';
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -9,16 +9,15 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./schedule-bdd.component.css'],
 })
 export class ScheduleBDDComponent {
-  schedules: Schedule[] = [];
-  schedulesAll: Observable<Schedule[]> = of([]);
+  schedules: Observable<Schedule[]> = of([]);
   idSchedulesChecked: number[] = [];
 
   isAlertAdd: boolean = false;
   isAlertDelete: boolean = false;
 
   constructor(private scheduleService: ScheduleService) {
-    this.schedulesAll = this.scheduleService.findAll();
-    this.schedulesAll.subscribe((schedules) => (this.schedules = schedules));
+    this.schedules = this.scheduleService.schedulesItems;
+    this.scheduleService.updateSuchedules();
   }
 
   onChangeAllCheckbox(event: any): void {
@@ -39,10 +38,10 @@ export class ScheduleBDDComponent {
     this.isAlertAdd = true;
   }
 
-  onWantDelete(id: number): void {
+  onWantDeleteById(id: number): void {
     this.clearScheduleSelected();
     this.addScheduleSelected(id);
-    this.isAlertDelete = true;
+    this.onWantDeleteSelected();
   }
 
   onWantDeleteSelected(): void {
@@ -72,7 +71,9 @@ export class ScheduleBDDComponent {
   }
 
   addAllScheduleSelected(): void {
-    this.idSchedulesChecked = this.schedules.map((schedule) => schedule.id);
+    this.schedules.subscribe(schedules => {
+      this.idSchedulesChecked = schedules.map(schedule => schedule.id);
+    });
   }
 
   clearScheduleSelected(): void {
@@ -80,10 +81,7 @@ export class ScheduleBDDComponent {
   }
 
   deleteSelected(): void {
-    for (let id of this.idSchedulesChecked) {
-      if (this.scheduleService.delete(id))
-        console.log('Succès de la suppression n°' + id);
-      else console.log('Echec de la suppression n°' + id);
-    }
+    for (let id of this.idSchedulesChecked)
+      this.scheduleService.delete(id).subscribe(_ => this.scheduleService.updateSuchedules());
   }
 }

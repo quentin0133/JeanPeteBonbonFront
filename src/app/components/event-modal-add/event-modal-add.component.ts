@@ -25,6 +25,9 @@ export class EventModalAddComponent implements OnInit {
   @Output()
   isAlertAddChange: EventEmitter<boolean> = new EventEmitter();
 
+  @Output()
+  onSave: EventEmitter<void> = new EventEmitter();
+
   servers: Server[] = [];
 
   form: FormGroup = new FormGroup({
