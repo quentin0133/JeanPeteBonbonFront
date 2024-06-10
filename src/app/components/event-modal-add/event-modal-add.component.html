@@ -18,24 +18,26 @@
           <h2 class="block text-2xl font-extrabold text-gray-800 dark:text-gray-200">
             Ajouter un évènement
           </h2>
-
           <!-- Form -->
-          <form class="m-6" [formGroup]="form">
+          <form class="m-6" novalidate [formGroup]="form">
             <mat-form-field class="w-full">
               <mat-label>Serveurs</mat-label>
-              <mat-select [multiple]="true" formControlName="serversId" #serversIndex>
+              <mat-select [multiple]="true" formControlName="serversId">
                 <mat-select-trigger>
-                  <ng-container *ngFor="let serverSelected of serversSelected; let first = first">
-                    {{(!first ? ', ' : '') + (serverSelected.label)}}
+                  <ng-container *ngFor="let serverSelected of serversSelected; let i=index; let first = first">
+                    <ng-container *ngIf="i < OVERFLOW_MULTIPLE_SELECTION">
+                      {{ (!first ? ', ' : '') + serverSelected.label }}
+                    </ng-container>
                   </ng-container>
-                  <ng-container *ngIf="(serversSelected.length || 0) > 1">
+                  <ng-container *ngIf="(serversSelected.length || 0) > OVERFLOW_MULTIPLE_SELECTION">
                     <span class="example-additional-selection">
-                      (+{{(serversSelected.length || 0) - 1}} {{serversSelected.length === 2 ? 'autre' : 'autres'}})
+                      (+{{ (serversSelected.length || 0) - OVERFLOW_MULTIPLE_SELECTION }}
+                      {{ serversSelected.length >= OVERFLOW_MULTIPLE_SELECTION ? 'autre' : 'autres' }})
                     </span>
                   </ng-container>
                 </mat-select-trigger>
                 <ng-container *ngFor="let server of servers; let index = index">
-                  <mat-option [value]="server.id">{{server.label}}</mat-option>
+                  <mat-option [value]="server.id">{{ server.label }}</mat-option>
                 </ng-container>
               </mat-select>
             </mat-form-field>
@@ -50,15 +52,15 @@
               placeholder="Mon message..."
               formControlName="message"
             ></textarea>
-            <div class="flex justify-between">
+            <div class="flex justify-between h-96">
               <app-date-picker
-                class="w-6/12"
+                class="h-full w-6/12"
                 formControlName="dates"
               >
                 <p>Salut</p>
               </app-date-picker>
               <app-time-picker
-                class="w-5/12"
+                class="h-full w-5/12"
                 formControlName="times"
               ></app-time-picker>
             </div>

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { Server } from '../../models/server';
 import {
   AbstractControl,
   FormControl,
-  FormGroup,
+  FormGroup, NgForm,
   Validators,
 } from '@angular/forms';
 import {
@@ -13,6 +13,7 @@ import {
 } from '../tools/reactive-form-tools';
 import { ScheduleService } from '../../services/schedule-service/schedule.service';
 import { BotService } from '../../services/bot-service/bot.service';
+import {scheduled} from "rxjs";
 
 @Component({
   selector: 'app-event-modal-add',
@@ -20,20 +21,24 @@ import { BotService } from '../../services/bot-service/bot.service';
   styleUrls: ['./event-modal-add.component.css'],
 })
 export class EventModalAddComponent implements OnInit {
+  OVERFLOW_MULTIPLE_SELECTION: number = 5;
+
   @Input()
   isAlertAdd?: boolean;
   @Output()
-  isAlertAddChange: EventEmitter<boolean> = new EventEmitter();
+  isAlertAddChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output()
-  onSave: EventEmitter<void> = new EventEmitter();
+  onSave: EventEmitter<void> = new EventEmitter<void>();
 
   servers: Server[] = [];
+
+  isAlertAdd$: boolean = false;
 
   form: FormGroup = new FormGroup({
     id: new FormControl<number>(0),
     version: new FormControl<number>(0),
-    serversId: new FormControl<number[]>([], Validators.required),
+    serversId: new FormControl<number[]>([], [Validators.required]),
     message: new FormControl<string>('', [
       Validators.required,
       Validators.maxLength(512),
@@ -42,11 +47,11 @@ export class EventModalAddComponent implements OnInit {
     times: new FormControl<Date[]>([], [Validators.required]),
   });
 
-  isAlertAdd$: boolean = false;
-
   get serversSelected() {
     return this.servers.filter((server) =>
-      this.serversId?.value.includes(server.id),
+      {
+        return this.serversId?.value.includes(server.id)
+      }
     );
   }
 
@@ -85,19 +90,32 @@ export class EventModalAddComponent implements OnInit {
       (this.form.value.id
         ? this.scheduleService.update(this.form.value)
         : this.scheduleService.save(this.form.value)
-      ).subscribe();
+      ).subscribe({
+        next: _ => {
+          this.scheduleService.findAll();
+          this.close();
+        },
+        error: e => console.log(e),
+      });
       this.close();
     }
   }
 
   onCancel(): void {
-    this.form.reset();
     this.close();
   }
 
   close(): void {
+    this.form.reset({
+      id: 0,
+      version: 0,
+      serversId: [],
+      message: '',
+      dates: [],
+      times: [],
+    });
     this.isAlertAdd = false;
-    this.isAlertAddChange.emit(this.isAlertAdd);
+    this.isAlertAddChange.emit(false);
   }
 
   getFormControl(name: string) {

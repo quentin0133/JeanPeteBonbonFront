@@ -31,9 +31,11 @@ import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
 import { TimePickerComponent } from './components/time-picker/time-picker.component';
 import { EventModalAddComponent } from './components/event-modal-add/event-modal-add.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { AuthModule } from '../auth/auth.module';
-import {MatSelectModule} from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
+import { ObsWithStatusPipe } from './pipes/obs-with-status/obs-with-status.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import {MatSelectModule} from "@angular/material/select";
     TimePickerComponent,
     TruncatePipe,
     EventModalAddComponent,
+    SearchBarComponent,
+    ObsWithStatusPipe
   ],
   imports: [
     BrowserModule,

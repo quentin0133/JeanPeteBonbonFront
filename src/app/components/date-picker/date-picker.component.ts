@@ -94,7 +94,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
   }
 
   onClearButton(calendar: any): void {
-    this.dates$ = [];
-    calendar.updateTodaysDate();
+    this.writeValue([]);
+    this.onChange(this.dates$);
   }
 }

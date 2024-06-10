@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Schedule } from '../../models/schedule';
 import { HotToastService } from '@ngneat/hot-toast';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, Observable, scheduled, tap} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -18,12 +18,13 @@ export class ScheduleService {
     private http: HttpClient,
   ) {}
 
-  updateSuchedules() {
-    this.findAll().subscribe(schedules => this.schedulesSubject.next(schedules));
+  findAll() {
+    this.http.get<Schedule[]>(this.ENDPOINT).subscribe(schedules => this.schedulesSubject.next(schedules));
   }
 
-  findAll(): Observable<Schedule[]> {
-    return this.http.get<Schedule[]>(this.ENDPOINT);
+  findByQuery(searchLabel: string, searchElement: string) {
+    this.http.get<Schedule[]>(`${this.ENDPOINT}?${searchLabel}_like=${searchElement}`)
+      .subscribe(schedules => this.schedulesSubject.next(schedules));
   }
 
   findById(id: number): Observable<Schedule> {

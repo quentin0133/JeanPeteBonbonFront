@@ -1,7 +1,8 @@
-import {Component, EventEmitter, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule-service/schedule.service';
-import {Observable, of, scheduled} from 'rxjs';
+import { Observable, of } from 'rxjs';
+import {FilterType} from "../../components/search-bar/search-bar.component";
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -15,18 +16,38 @@ export class ScheduleBDDComponent {
   isAlertAdd: boolean = false;
   isAlertDelete: boolean = false;
 
+  filters: FilterType[] = [
+    {
+      label: "Id",
+      variable: "id",
+      type: "number"
+    },
+    {
+      label: "Message",
+      variable: "message",
+      type: "string"
+    },
+    {
+      label: "Date",
+      variable: "dates",
+      type: "date"
+    },
+    {
+      label: "Temps",
+      variable: "times",
+      type: "time"
+    }
+  ];
+
   constructor(private scheduleService: ScheduleService) {
     this.schedules = this.scheduleService.schedulesItems;
-    this.scheduleService.updateSuchedules();
+    this.scheduleService.findAll();
   }
 
   onChangeAllCheckbox(event: any): void {
+    console.error("A")
     if (event.target?.checked) this.addAllScheduleSelected();
-    else this.clearScheduleSelected();
-  }
-
-  isChecked(id: number): boolean {
-    return this.idSchedulesChecked.includes(id);
+    else this.clearSelection();
   }
 
   onChangeCheckbox(id: number): void {
@@ -39,18 +60,18 @@ export class ScheduleBDDComponent {
   }
 
   onWantDeleteById(id: number): void {
-    this.clearScheduleSelected();
+    this.clearSelection();
     this.addScheduleSelected(id);
-    this.onWantDeleteSelected();
+    this.onWantDeleteSelection();
   }
 
-  onWantDeleteSelected(): void {
+  onWantDeleteSelection(): void {
     this.isAlertDelete = true;
   }
 
   onCancelDelete(): void {
     this.isAlertDelete = false;
-    this.clearScheduleSelected();
+    this.clearSelection();
   }
 
   /**
@@ -58,8 +79,12 @@ export class ScheduleBDDComponent {
    */
   onDeleteSelected(): void {
     this.isAlertDelete = false;
-    this.deleteSelected();
-    this.clearScheduleSelected();
+    this.deleteSelection();
+    this.clearSelection();
+  }
+
+  isChecked(id: number): boolean {
+    return this.idSchedulesChecked.includes(id);
   }
 
   addScheduleSelected(id: number): void {
@@ -71,17 +96,21 @@ export class ScheduleBDDComponent {
   }
 
   addAllScheduleSelected(): void {
-    this.schedules.subscribe(schedules => {
-      this.idSchedulesChecked = schedules.map(schedule => schedule.id);
+    this.schedules.subscribe((schedules) => {
+      this.idSchedulesChecked = schedules.map((schedule) => schedule.id);
     });
   }
 
-  clearScheduleSelected(): void {
+  clearSelection(): void {
     this.idSchedulesChecked = [];
   }
 
-  deleteSelected(): void {
+  deleteSelection(): void {
     for (let id of this.idSchedulesChecked)
-      this.scheduleService.delete(id).subscribe(_ => this.scheduleService.updateSuchedules());
+      this.scheduleService
+        .delete(id)
+        .subscribe((_) => this.scheduleService.findAll());
   }
+
+  protected readonly String = String;
 }
