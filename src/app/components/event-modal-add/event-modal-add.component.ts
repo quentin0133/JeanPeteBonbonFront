@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Server } from '../../models/server';
+import { Guild } from '../../models/guild';
 import {
   AbstractControl,
   FormControl,
@@ -25,7 +25,7 @@ export class EventModalAddComponent implements OnInit {
   @Output()
   isAlertAddChange: EventEmitter<boolean> = new EventEmitter();
 
-  servers: Server[] = [];
+  servers: Guild[] = [];
 
   form: FormGroup = new FormGroup({
     id: new FormControl<number>(0),
