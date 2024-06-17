@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { Server } from '../../models/server';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Guild } from '../../models/guild';
 import {
   AbstractControl,
   FormControl,
@@ -31,7 +31,7 @@ export class EventModalAddComponent implements OnInit {
   @Output()
   onSave: EventEmitter<void> = new EventEmitter<void>();
 
-  servers: Server[] = [];
+  servers: Guild[] = [];
 
   isAlertAdd$: boolean = false;
 

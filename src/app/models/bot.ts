@@ -1,7 +1,5 @@
-import { Server } from './server';
+import { Guild } from './guild';
 
 export interface Bot {
-  id: number;
-  version: number;
-  servers: Server[];
+  servers: Guild[];
 }
