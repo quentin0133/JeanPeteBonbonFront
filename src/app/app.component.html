@@ -1,4 +1,7 @@
-<main class="lg:w-10/12 ml-auto h-full">
-  <router-outlet></router-outlet>
-</main>
-<app-sidebar></app-sidebar>
+<ng-container *ngIf="isLogged">
+  <main class="lg:w-10/12 ml-auto h-full">
+    <router-outlet></router-outlet>
+  </main>
+  <app-sidebar></app-sidebar>
+</ng-container>
+<app-login *ngIf="!isLogged"></app-login>

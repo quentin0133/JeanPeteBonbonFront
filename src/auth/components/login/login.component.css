@@ -1,0 +1,59 @@
+#container {
+  background: url("/assets/images/bg-auth.png") repeat 0 0;
+  background-size: 75px;
+  -webkit-animation: bg-scrolling-reverse 3s infinite;
+  -moz-animation: bg-scrolling-reverse 3s infinite;
+  -o-animation: bg-scrolling-reverse 3s infinite;
+  animation: bg-scrolling-reverse 3s infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  -o-animation-timing-function: linear;
+  animation-timing-function: linear;
+
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+
+  -webkit-animation-direction: normal;
+  animation-direction: normal;
+}
+
+@-webkit-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 75px 75px;
+  }
+}
+@-moz-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 75px 75px;
+  }
+}
+@-o-keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 75px 75px;
+  }
+}
+@keyframes bg-scrolling-reverse {
+  100% {
+    background-position: 75px 75px;
+  }
+}
+@-webkit-keyframes bg-scrolling {
+  0% {
+    background-position: 75px 75px;
+  }
+}
+@-moz-keyframes bg-scrolling {
+  0% {
+    background-position: 75px 75px;
+  }
+}
+@-o-keyframes bg-scrolling {
+  0% {
+    background-position: 75px 75px;
+  }
+}
+@keyframes bg-scrolling {
+  0% {
+    background-position: 75px 75px;
+  }
+}

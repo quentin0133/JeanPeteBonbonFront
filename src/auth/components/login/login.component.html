@@ -1,1 +1,51 @@
-<p>login works!</p>
+<div id="container" class="w-full h-full">
+  <img #bgImage [src]="'/assets/images/auth-background/bg-' + indexBackground + '.png'" alt="Fond dynamique qui change à intervalle régulier" class="w-full h-full object-contain absolute" />
+  <img #bgImageTransition [src]="'/assets/images/auth-background/bg-' + indexTransitionBackground + '.png'" alt="Fond servant de transition" class="w-full h-full object-contain absolute opacity-0" />
+  <div class="absolute h-auto py-8 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 2xl:w-1/4 xl:w-[32.5%] lg:w-[40%] w-[47.5%] bg-opacity-80 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+    <div class="h-full px-4 sm:px-7">
+      <!-- Form -->
+      <form [formGroup]="loginForm" class="h-full flex flex-col justify-center gap-5" (submit)="handleSubmit($event)">
+        <h1 class="text-center dark:text-white">Bienvenue dans l'administration de Jean Kasskouille</h1>
+
+        <!-- Form Group -->
+        <div>
+          <label for="email" class="block text-sm mb-2 dark:text-white">Identifiant</label>
+          <div class="relative">
+            <input type="text" id="email" name="text" autocomplete="email" [class.invalid]="isInvalid('email')" formControlName="email" placeholder="Identifiant" class="py-3 px-4 block w-full border-2 outline-2 border-gray-200 rounded-lg text-sm focus:outline-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-describedby="email-error">
+            <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
+              <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+              </svg>
+            </div>
+          </div>
+          <div id="email-error" class="mt-2">
+            <p *ngIf="hasError('email', 'required')" class="text-xs font-medium !m-0 text-red-600">L'identifiant est obligatoire</p>
+          </div>
+        </div>
+        <!-- End Form Group -->
+
+        <!-- Form Group -->
+        <div>
+          <div class="flex justify-between items-center">
+            <label for="password" class="block text-sm mb-2 dark:text-white">Mot de passe</label>
+          </div>
+          <div class="relative">
+            <input type="password" id="password" name="password" autocomplete="current-password" [class.invalid]="isInvalid('password')" formControlName="password" placeholder="Mot de passe" class="py-3 px-4 block w-full border-2 outline-2 border-gray-200 rounded-lg text-sm focus:outline-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" aria-describedby="password-error">
+            <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
+              <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+              </svg>
+            </div>
+          </div>
+          <div id="password-error" class="mt-2">
+            <p *ngIf="hasError('password', 'required')" class="text-xs font-medium !m-0 text-red-600">Le mot de passe est obligatoire</p>
+          </div>
+        </div>
+        <!-- End Form Group -->
+
+        <button type="submit" [disabled]="loginForm.invalid" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-50 disabled:pointer-events-none">Se connecter</button>
+      </form>
+      <!-- End Form -->
+    </div>
+  </div>
+</div>

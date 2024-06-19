@@ -6,14 +6,14 @@ import {
   FormGroup, NgForm,
   Validators,
 } from '@angular/forms';
+import { ScheduleService } from '../../services/schedule-service/schedule.service';
+import { BotService } from '../../services/bot-service/bot.service';
+import { scheduled } from 'rxjs';
 import {
   getFormControl,
   hasControlError,
   isControlInvalid,
-} from '../tools/reactive-form-tools';
-import { ScheduleService } from '../../services/schedule-service/schedule.service';
-import { BotService } from '../../services/bot-service/bot.service';
-import {scheduled} from "rxjs";
+} from 'src/tools/reactive-form-tools';
 
 @Component({
   selector: 'app-event-modal-add',
