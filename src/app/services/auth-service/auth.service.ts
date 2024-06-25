@@ -49,7 +49,11 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${environment.API_URL}/auth/login`, credentials)
       .pipe(this.toast.observe({
         loading: "Connexion en cours...",
-        error: "Accès refusé.",
+        error: err => {
+          if (err.status === 0)
+            return "Le serveur ne répond pas";
+          return "Accès refusé."
+        },
         success: response => `Bienvenue ${response.user.firstName}`
       }), tap(response => {
         this.currentResponse.next(response)
@@ -59,5 +63,9 @@ export class AuthService {
   logout() {
     this.currentResponse.next(undefined)
     this.router.navigate(['/auth', {outlets: {'authOutlet' : 'login'}}])
+  }
+
+  ping() {
+    return this.http.get(environment.API_URL)
   }
 }

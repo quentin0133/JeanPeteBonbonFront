@@ -1,6 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@font-face {
+  font-family: 'Fredoka One';
+  src: url('assets/fonts/Fredoka/Fredoka-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Chewy';
+  src: url('assets/fonts/Chewy/Chewy.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+h1, h2, h3 {
+  font-family: 'Fredoka One', cursive, sans-serif !important;
+}
+
+button {
+  font-family: 'Fredoka One', cursive, sans-serif !important;
+  font-size: 1em;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+blockquote {
+  font-family: 'Chewy', cursive, sans-serif !important;
+  font-style: italic !important;
+}

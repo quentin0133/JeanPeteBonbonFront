@@ -6,8 +6,10 @@ import {
 } from 'src/tools/reactive-form-tools';
 import {AuthService} from "../../../app/services/auth-service/auth.service";
 import {Router} from "@angular/router";
+import {getRandomInteger} from "../../../tools/random";
+import {HotToastService} from "@ngneat/hot-toast";
 
-const NUMBER_BG_IMG: number = 14;
+const NUMBER_BG_IMG: number = 15;
 const BACKGROUND_IMAGE_CHANGE_TIME: number = 6; // seconds
 const TRANSITION_DURATION: number = 1.5; // seconds
 
@@ -17,7 +19,7 @@ const TRANSITION_DURATION: number = 1.5; // seconds
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  indexBackground: number = Math.floor(Math.random() * NUMBER_BG_IMG) + 1;
+  indexBackground: number = getRandomInteger(1, NUMBER_BG_IMG + 1);
   indexTransitionBackground: number = this.indexBackground;
 
   @ViewChild('bgImage') bgImage!: ElementRef;
@@ -31,19 +33,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     password: new FormControl("", [Validators.required])
   });
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private toast: HotToastService) {
   }
 
   ngOnInit(): void {
-    this.imageSlideInterval = setInterval(() => {
-      this.setBgImageOpacity(0);
-      this.indexTransitionBackground = this.indexBackground;
-        do {
-        this.indexBackground = Math.floor(Math.random() * 4) + 1;
-      } while (this.indexTransitionBackground === this.indexBackground);
-
-      this.fadeOutBackgroundImage();
-    }, (BACKGROUND_IMAGE_CHANGE_TIME + TRANSITION_DURATION) * 1000);
+    this.startBackgroundCaroussel();
+    this.authService.ping().subscribe({
+      error: err => {
+        if (err.status === 0)
+          this.toast.error("Le serveur ne répond plus");
+        return err;
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -86,5 +87,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   hasError(name: string, errorCode: string) {
     let formControl = this.getFormControl(name);
     return formControl?.touched && formControl?.hasError(errorCode);
+  }
+
+  private startBackgroundCaroussel() {
+    this.imageSlideInterval = setInterval(() => {
+      this.setBgImageOpacity(0);
+      this.indexTransitionBackground = this.indexBackground;
+      do {
+        this.indexBackground = Math.floor(Math.random() * 4) + 1;
+      } while (this.indexTransitionBackground === this.indexBackground);
+
+      this.fadeOutBackgroundImage();
+    }, (BACKGROUND_IMAGE_CHANGE_TIME + TRANSITION_DURATION) * 1000);
   }
 }
