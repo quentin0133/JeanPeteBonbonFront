@@ -12,5 +12,5 @@ export class SidebarComponent {
   constructor(private authService: AuthService) {
   }
 
-  logout = this.authService.logout;
+  logout = () => this.authService.logout();
 }

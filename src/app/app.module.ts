@@ -25,7 +25,7 @@ import {
 } from '@angular-material-components/datetime-picker';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import * as fr from '@angular/common/locales/fr';
-import { registerLocaleData } from '@angular/common';
+import {NgOptimizedImage, registerLocaleData} from '@angular/common';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
@@ -54,29 +54,30 @@ import { ObsWithStatusPipe } from './pipes/obs-with-status/obs-with-status.pipe'
     SearchBarComponent,
     ObsWithStatusPipe
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    NgxMatDatetimePickerModule,
-    MatMenuModule,
-    MatIconModule,
-    MatMomentDateModule,
-    MatCardModule,
-    NgxMatNativeDateModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    NgxMultipleDatesModule,
-    AuthModule,
-    FormsModule,
-    MatInputModule,
-    HttpClientModule,
-    HotToastModule.forRoot({
-      theme: 'snackbar',
-    }),
-    AppRoutingModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        NgxMatDatetimePickerModule,
+        MatMenuModule,
+        MatIconModule,
+        MatMomentDateModule,
+        MatCardModule,
+        NgxMatNativeDateModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        NgxMultipleDatesModule,
+        AuthModule,
+        FormsModule,
+        MatInputModule,
+        HttpClientModule,
+        HotToastModule.forRoot({
+            theme: 'snackbar',
+        }),
+        AppRoutingModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        NgOptimizedImage,
+    ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   bootstrap: [AppComponent],
 })
