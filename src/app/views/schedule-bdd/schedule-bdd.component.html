@@ -1,24 +1,29 @@
-<div class="flex items-center justify-center h-full">
+<section class="flex items-center justify-center h-full">
   <div class="flex flex-col bg-white rounded-lg w-10/12">
-    <div class="-m-1.5 overflow-x-auto">
+    <div class="-m-1.5">
       <div class="p-1.5 min-w-full inline-block align-middle">
         <div
           class="border rounded-lg divide-y divide-gray-200 dark:border-gray-700 dark:divide-gray-700"
+          [ngClass]="(schedules | async)?.length ? '' : 'pb-6'"
         >
-          <div class="flex gap-x-5 py-3 px-4">
+          <h1 class="!m-0 px-4 py-2">Gestion des évènements</h1>
+          <div class="flex gap-x-5 py-4 px-4">
             <app-search-bar [filters]="filters"></app-search-bar>
             <button
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-blue-500 text-white
-              hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+              class="p-0 rounded-3xl items-center text-gray-400 hover:text-blue-400 text-sm outline-blue-500
+              disabled:opacity-50 disabled:cursor-not-allowed dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-gray-600"
+              title="Ajouter un évènement"
               (click)="onWantAdd()"
             >
-              Ajouter un évènement
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
             </button>
             <ng-container *ngIf="idSchedulesChecked.length > 0">
               <button
                 type="button"
                 class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-red-500 text-white
-                hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1
+                hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed dark:focus:outline-blue-500 dark:focus:ring-1
                 dark:focus:ring-gray-600"
                 (click)="onWantDeleteSelection()"
               >
@@ -33,235 +38,233 @@
               </div>
             </ng-container>
           </div>
-          <div class="overflow-hidden">
-            <table
-              class="min-w-full text-center divide-y divide-gray-200 dark:divide-gray-700"
-              aria-label="table showing all the schedules that can be managed"
-            >
-              <thead class="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th scope="col" class="py-3 px-4 pe-0">
-                  <div class="flex items-center h-5">
-                    <input
-                      id="hs-table-pagination-checkbox-all"
-                      type="checkbox"
-                      title="Sélectionner tous les éléments"
-                      class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700
-                      dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                      [checked]="
+          <table
+            class="min-w-full text-center"
+            aria-label="Table des évènements du bot"
+          >
+            <thead class="bg-blue-100 border-b dark:bg-blue-700">
+            <tr>
+              <th scope="col" class="py-3 px-4 pe-0">
+                <div class="flex items-center h-5">
+                  <input
+                    id="hs-table-pagination-checkbox-all"
+                    type="checkbox"
+                    title="Sélectionner tous les éléments"
+                    class="w-4 h-4 border-gray-200 rounded text-gray-600 focus:ring-blue-500 dark:bg-blue-800 dark:border-gray-700
+                      dark:checked:bg-blue-500 disabled:hover:cursor-not-allowed dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                    [checked]="
                           idSchedulesChecked.length == (schedules | async)?.length &&
                           ((schedules | async)?.length || false) > 0
                         "
-                      [disabled]="(schedules | async)?.length === 0"
-                      (click)="onChangeAllCheckbox($event)"
-                    />
-                    <label
-                      for="hs-table-pagination-checkbox-all"
-                      class="sr-only"
-                    >Checkbox</label
+                    [disabled]="(schedules | async)?.length === 0"
+                    (click)="onChangeAllCheckbox($event)"
+                  />
+                  <label
+                    for="hs-table-pagination-checkbox-all"
+                    class="sr-only"
+                  >Checkbox</label
+                  >
+                </div>
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-sm font-medium uppercase"
+              >
+                Id
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-sm font-medium uppercase"
+              >
+                Message
+              </th>
+              <th
+                scope="col"
+                class="w-52 px-6 py-3 text-sm font-medium uppercase"
+              >
+                Dates
+              </th>
+              <th
+                scope="col"
+                class="w-36 px-6 py-3 text-sm font-medium uppercase"
+              >
+                Temps
+              </th>
+              <th
+                scope="col"
+                class="w-32 px-6 py-3 text-sm font-medium uppercase"
+              >
+                Action
+              </th>
+            </tr>
+            </thead>
+            <tbody class="border-b">
+              <ng-container *ngIf="(schedules | obsWithStatus | async) as schedulesResult">
+                <tr class="mx-auto bg-blue-200" *ngIf="schedulesResult.loading">
+                  <td class="py-4 text-gray-600 dark:bg-blue-800 dark:text-white" colspan="100">
+                    Chargement...
+                  </td>
+                </tr>
+                <tr class="mx-auto bg-[#f4f9ff] dark:bg-blue-800" *ngIf="schedulesResult.value.length === 0">
+                  <td class="py-4 text-gray-600 dark:text-blue-700" colspan="100">
+                    Aucune donnée trouvé
+                  </td>
+                </tr>
+                <ng-container *ngIf="schedulesResult.value && schedulesResult.value.length > 0">
+                  <tr *ngFor="let schedule of schedulesResult.value; let index = index">
+                    <td class="py-3 ps-4">
+                      <div class="flex items-center h-5">
+                        <input
+                          id="hs-table-pagination-checkbox-1"
+                          type="checkbox"
+                          title="Sélectionner l'élément"
+                          class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-blue-800
+                                dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                          [checked]="isChecked(schedule.id)"
+                          (change)="onChangeCheckbox(schedule.id)"
+                        />
+                        <label
+                          for="hs-table-pagination-checkbox-1"
+                          class="sr-only"
+                        >Checkbox</label
+                        >
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200"
                     >
-                  </div>
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-sm font-medium text-gray-500 uppercase"
-                >
-                  Id
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-sm font-medium text-gray-500 uppercase"
-                >
-                  Message
-                </th>
-                <th
-                  scope="col"
-                  class="w-52 px-6 py-3 text-sm font-medium text-gray-500 uppercase"
-                >
-                  Dates
-                </th>
-                <th
-                  scope="col"
-                  class="w-36 px-6 py-3 text-sm font-medium text-gray-500 uppercase"
-                >
-                  Temps
-                </th>
-                <th
-                  scope="col"
-                  class="w-32 px-6 py-3 text-sm font-medium text-gray-500 uppercase"
-                >
-                  Action
-                </th>
-              </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <ng-container *ngIf="(schedules | obsWithStatus | async) as schedulesResult">
-                  <ng-container *ngIf="schedulesResult.loading">
-                    <tr><td>Chargement...</td></tr>
-                  </ng-container>
-                  <ng-container *ngIf="schedulesResult.value">
-                    <ng-container *ngIf="schedulesResult.value.length > 0">
-                      <tr *ngFor="let schedule of schedulesResult.value; let index = index">
-                        <td class="py-3 ps-4">
-                          <div class="flex items-center h-5">
-                            <input
-                              id="hs-table-pagination-checkbox-1"
-                              type="checkbox"
-                              title="Sélectionner l'élément"
-                              class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-800
-                              dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                              [checked]="isChecked(schedule.id)"
-                              (change)="onChangeCheckbox(schedule.id)"
-                            />
-                            <label
-                              for="hs-table-pagination-checkbox-1"
-                              class="sr-only"
-                            >Checkbox</label
-                            >
-                          </div>
-                        </td>
-                        <td
-                          class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200"
+                      {{ schedule.id }}
+                    </td>
+                    <td
+                      class="px-6 py-4 text-md text-gray-800 dark:text-gray-200"
+                    >
+                      {{ schedule.message | truncate: 92 }}
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"
+                    >
+                      <div class="max-h-[4rem] overflow-y-auto snap-y">
+                        <ng-container
+                          *ngFor="let date of schedule.dates; let last = last"
                         >
-                          {{ schedule.id }}
-                        </td>
-                        <td
-                          class="px-6 py-4 text-md text-gray-800 dark:text-gray-200"
+                          {{ date | date: "dd MMMM yyyy"
+                          }}<ng-container *ngIf="!last"><br /></ng-container>
+                        </ng-container>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"
+                    >
+                      <div class="max-h-[4rem] overflow-y-auto snap-y">
+                        <ng-container
+                          *ngFor="let time of schedule.times; let last = last"
                         >
-                          {{ schedule.message | truncate: 92 }}
-                        </td>
-                        <td
-                          class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"
+                          {{ time | date: "hh:mm"
+                          }}<ng-container *ngIf="!last"><br /></ng-container>
+                        </ng-container>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-md font-medium">
+                      <button
+                        type="button"
+                        title="Modifier"
+                        class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent hover:text-blue-400 focus:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-red-400 dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-blue-600"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6"
                         >
-                          <div class="max-h-[4rem] overflow-y-auto snap-y">
-                            <ng-container
-                              *ngFor="let date of schedule.dates; let last = last"
-                            >
-                              {{ date | date: "dd MMMM yyyy"
-                              }}<ng-container *ngIf="!last"><br /></ng-container>
-                            </ng-container>
-                          </div>
-                        </td>
-                        <td
-                          class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200"
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        title="Supprimer"
+                        class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-red-400"
+                        (click)="onWantDeleteById(schedule.id)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6"
                         >
-                          <div class="max-h-[4rem] overflow-y-auto snap-y">
-                            <ng-container
-                              *ngFor="let time of schedule.times; let last = last"
-                            >
-                              {{ time | date: "hh:mm"
-                              }}<ng-container *ngIf="!last"><br /></ng-container>
-                            </ng-container>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-md font-medium">
-                          <button
-                            type="button"
-                            title="Modifier"
-                            class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent text-gray-500 hover:text-blue-500 focus:text-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-300 dark:hover:text-red-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-blue-600"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              class="w-6 h-6"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                              />
-                            </svg>
-                          </button>
-                          <button
-                            type="button"
-                            title="Supprimer"
-                            class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent text-gray-500 hover:text-red-500 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-300 dark:hover:text-red-400"
-                            (click)="onWantDeleteById(schedule.id)"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              class="w-6 h-6"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-                    </ng-container>
-                    <ng-container *ngIf="schedulesResult.value.length === 0">
-                      Aucune donnée trouvé
-                    </ng-container>
-                  </ng-container>
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
                 </ng-container>
-              </tbody>
-            </table>
-          </div>
-          <div class="py-1 px-4">
-            <nav class="flex justify-center gap-x-5">
-              <button
-                type="button"
-                class="p-2.5 inline-flex items-center gap-x-2 text-md rounded-full text-gray-800 hover:bg-blue-100 disabled:opacity-50
-                disabled:pointer-events-none dark:text-white dark:hover:bg-white/10"
-              >
-                <span aria-hidden="true">«</span>
-                <span class="sr-only">Précédent</span>
-              </button>
-              <button
-                type="button"
-                class="min-w-[40px] bg-blue-500 text-white flex justify-center items-center hover:bg-blue-400 py-2.5 text-md rounded-full
-                disabled:pointer-events-none dark:text-white dark:hover:bg-white/10"
-                aria-current="page"
-                [disabled]="true"
-              >
-                1
-              </button>
-              <button
-                type="button"
-                class="min-w-[40px] flex justify-center items-center text-gray-800 hover:bg-blue-100 py-2.5 text-md rounded-full
-                disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10"
-              >
-                2
-              </button>
-              <button
-                type="button"
-                class="min-w-[40px] flex justify-center items-center text-gray-800 hover:bg-blue-100 py-2.5 text-md rounded-full
-                disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10"
-              >
-                3
-              </button>
-              <button
-                type="button"
-                class="p-2.5 inline-flex items-center gap-x-2 text-md rounded-full text-gray-800 hover:bg-blue-100 disabled:opacity-50
-                disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:outline-none dark:focus:ring-1
+              </ng-container>
+            </tbody>
+          </table>
+          <nav class="flex justify-center gap-x-5" *ngIf="(schedules | async)?.length">
+            <button
+              type="button"
+              class="p-2.5 inline-flex items-center gap-x-2 text-md rounded-full text-gray-800 hover:bg-blue-100 disabled:opacity-50
+                disabled:cursor-not-allowed dark:text-white dark:hover:bg-white/10"
+            >
+              <span aria-hidden="true">«</span>
+              <span class="sr-only">Précédent</span>
+            </button>
+            <button
+              type="button"
+              class="min-w-[40px] bg-blue-500 text-white flex justify-center items-center hover:bg-blue-400 py-2.5 text-md rounded-full
+                disabled:cursor-not-allowed dark:text-white dark:hover:bg-white/10"
+              aria-current="page"
+              [disabled]="true"
+            >
+              1
+            </button>
+            <button
+              type="button"
+              class="min-w-[40px] flex justify-center items-center text-gray-800 hover:bg-blue-100 py-2.5 text-md rounded-full
+                disabled:opacity-50 disabled:cursor-not-allowed dark:text-white dark:hover:bg-white/10"
+            >
+              2
+            </button>
+            <button
+              type="button"
+              class="min-w-[40px] flex justify-center items-center text-gray-800 hover:bg-blue-100 py-2.5 text-md rounded-full
+                disabled:opacity-50 disabled:cursor-not-allowed dark:text-white dark:hover:bg-white/10"
+            >
+              3
+            </button>
+            <button
+              type="button"
+              class="p-2.5 inline-flex items-center gap-x-2 text-md rounded-full text-gray-800 hover:bg-blue-100 disabled:opacity-50
+                disabled:cursor-not-allowed dark:text-white dark:hover:bg-white/10 dark:focus:outline-blue-500 dark:focus:ring-1
                 dark:focus:ring-gray-600"
-              >
-                <span class="sr-only">Suivant</span>
-                <span aria-hidden="true">»</span>
-              </button>
-            </nav>
-          </div>
+            >
+              <span class="sr-only">Suivant</span>
+              <span aria-hidden="true">»</span>
+            </button>
+          </nav>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 <div
   class="hs-overlay w-full h-full fixed top-0 start-0 overflow-x-hidden overflow-y-auto"
-  [ngClass]="isAlertDelete ? 'open z-[80]' : 'z-[-10]'"
+  [ngClass]="isAlertDelete ? 'open z-[80]' : '-z-10'"
 >
   <div
-    class="w-full h-full absolute z-[-10] bg-gray-800 opacity-65"
+    class="w-full h-full absolute z-[-10] bg-blue-800 opacity-65"
     [hidden]="!isAlertDelete"
   ></div>
   <div
@@ -269,14 +272,14 @@
     md:max-w-2xl md:w-full m-3 md:mx-auto"
   >
     <div
-      class="relative flex flex-col bg-white border shadow-sm rounded-xl overflow-hidden dark:bg-gray-800 dark:border-gray-700"
+      class="relative flex flex-col bg-white border shadow-sm rounded-xl overflow-hidden dark:bg-blue-800 dark:border-gray-700"
     >
       <div class="absolute top-2 end-2">
         <button
           type="button"
           class="flex justify-center items-center w-7 h-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800
-          hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-gray-700
-          dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed dark:text-white dark:border-transparent dark:hover:bg-blue-700
+          dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-gray-600"
           data-hs-overlay="#hs-danger-alert"
         >
           <span class="sr-only">Fermer</span>
@@ -330,7 +333,7 @@
                   : "Supprimer les évènements"
               }}
             </h3>
-            <p class="text-gray-500">
+            <p>
               Êtes-vous sûre que vous voulez supprimer cet élément ? Il sera
               impossible de le récupérer par la suite.
             </p>
@@ -339,11 +342,11 @@
       </div>
 
       <div
-        class="flex justify-end items-center gap-x-2 py-3 px-4 bg-gray-50 border-t dark:bg-gray-800 dark:border-gray-700"
+        class="flex justify-end items-center gap-x-2 py-3 px-4 bg-blue-50 border-t dark:bg-blue-800 dark:border-gray-700"
       >
         <button
           class="py-2 px-3 inline-flex items-center gap-x-2 text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600
-          disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          disabled:opacity-50 disabled:cursor-not-allowed dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-gray-600"
           (click)="onDeleteSelected()"
         >
           Supprimer
@@ -351,8 +354,8 @@
         <button
           type="button"
           class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800
-          shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white
-          dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          shadow-sm hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-slate-900 dark:border-gray-700 dark:text-white
+          dark:hover:bg-blue-800 dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-gray-600"
           data-hs-overlay="#hs-danger-alert"
           (click)="onCancelDelete()"
         >

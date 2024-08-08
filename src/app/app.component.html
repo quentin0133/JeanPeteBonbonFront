@@ -1,7 +1,7 @@
 <ng-container *ngIf="isLogged">
-  <main class="w-full 2xl:w-[85%] xl:w-[82.5%] lg:w-[80%] ml-auto h-full">
+  <app-sidebar></app-sidebar>
+  <main class="2xl:w-[80%] xl:w-[77.5%] lg:w-[75%] ml-auto h-full text-gray-600">
     <router-outlet></router-outlet>
   </main>
-  <app-sidebar></app-sidebar>
 </ng-container>
 <app-login *ngIf="!isLogged"></app-login>

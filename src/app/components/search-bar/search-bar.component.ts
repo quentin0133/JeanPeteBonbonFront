@@ -10,7 +10,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { debounceTime, Subject } from 'rxjs';
-import { ScheduleService } from '../../services/schedule-service/schedule.service';
+import { ScheduleService } from '../../services/./schedule/schedule.service';
 
 export interface FilterType {
   label: string;

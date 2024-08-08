@@ -4,7 +4,7 @@ import {
   getFormControl,
   isControlInvalid,
 } from 'src/tools/reactive-form-tools';
-import {AuthService} from "../../../app/services/auth-service/auth.service";
+import {AuthService} from "../../../app/services/./auth/auth.service";
 import {Router} from "@angular/router";
 import {getRandomInteger} from "../../../tools/random";
 import {HotToastService} from "@ngneat/hot-toast";

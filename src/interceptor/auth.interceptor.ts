@@ -8,7 +8,7 @@ import {
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HotToastService } from '@ngneat/hot-toast';
-import { AuthService } from '../app/services/auth-service/auth.service';
+import { AuthService } from '../app/services/./auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

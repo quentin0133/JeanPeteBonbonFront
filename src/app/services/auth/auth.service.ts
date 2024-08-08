@@ -36,14 +36,14 @@ export class AuthService {
     })
   }
 
-  register(user: User): Observable<void> {
-    return this.http.post<AuthResponse>(`${environment.API_URL}/auth/register`, user)
-      .pipe(this.toast.observe({
-        loading: "Enregistrement en cours...",
-        error: "Une erreur empêche l'inscription",
-        success: response => `L'inscription de ${response.user.firstName} ${response.user.lastName} a été enregistrer avec succès`
-      }), map(() => { }))
-  }
+  // register(user: User): Observable<void> {
+  //   return this.http.post<AuthResponse>(`${environment.API_URL}/auth/register`, user)
+  //     .pipe(this.toast.observe({
+  //       loading: "Enregistrement en cours...",
+  //       error: "Une erreur empêche l'inscription",
+  //       success: response => `L'inscription de ${response.user.firstName} ${response.user.lastName} a été enregistrer avec succès`
+  //     }), map(() => { }))
+  // }
 
   login(credentials: { email: string, password: string }) {
     return this.http.post<AuthResponse>(`${environment.API_URL}/auth/login`, credentials)
@@ -52,7 +52,7 @@ export class AuthService {
         error: err => {
           if (err.status === 0)
             return "Le serveur ne répond pas";
-          return "Accès refusé."
+          return "L'identifiant ou le mot de passe est incorrecte"
         },
         success: response => `Bienvenue ${response.user.firstName}`
       }), tap(response => {

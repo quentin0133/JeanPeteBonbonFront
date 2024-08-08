@@ -6,7 +6,7 @@ import { TrollMessageBDDComponent } from './views/troll-message-bdd/troll-messag
 import { ScheduleBDDComponent } from './views/schedule-bdd/schedule-bdd.component';
 import {LoginComponent} from "../auth/components/login/login.component";
 import { AuthComponent } from '../auth/views/auth/auth.component';
-import { AuthService } from './services/auth-service/auth.service';
+import { AuthService } from './services/./auth/auth.service';
 import {AuthGuard} from "../auth/guards/auth.guard";
 
 const routes: Routes = [

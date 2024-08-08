@@ -30,12 +30,13 @@
       <path d="m21 21-4.3-4.3"/>
     </svg>
   </div>
-  <div #dropdown class="hs-dropdown absolute inset-y-0 end-0 border-l-2 w-auto"
+  <div #dropdown class="hs-dropdown absolute inset-y-0 end-0 w-auto"
        [ngClass]="isDropdownOpen ? 'open' : ''">
     <button id="hs-dropdown-default" type="button"
             (click)="onOpenDropdown()"
-            class="hs-dropdown-toggle outline-gray-400 rounded-lg h-full py-3 px-4 inline-flex items-center justify-end gap-x-2 text-sm font-medium bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-      {{currentFilterSelected.label}}
+            [title]="'Rechercher par ' + currentFilterSelected.label.toLocaleLowerCase()"
+            class="hs-dropdown-toggle outline-blue-500 rounded-lg rounded-l-none border-l-2 h-full py-3 px-4 inline-flex items-center justify-end gap-x-2 text-sm font-medium bg-white shadow-sm hover:bg-blue-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+      {{ currentFilterSelected.label }}
       <svg class="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round">
@@ -44,14 +45,20 @@
     </button>
 
     <div
-      class="hs-dropdown-menu absolute border-2 flex flex-col transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
-      [hidden]="false"
+      class="hs-dropdown-menu absolute border-2 flex flex-col transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 bg-white shadow-md rounded-lg mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
+      [ngClass]="isDropdownOpen ? 'open z-50' : '-z-10'"
       aria-labelledby="hs-dropdown-default">
       <button
-        *ngFor="let filter of filters"
+        [attr.aria-hidden]="isDropdownOpen ? null : 'hidden'"
+        [tabIndex]="isDropdownOpen ? 0 : -1"
+        *ngFor="let filter of filters; let first = first; let last = last"
+        [class.rounded-t-lg]="first"
+        [class.rounded-b-lg]="last"
+        [class.border-b-2]="!last"
+        [title]="'Rechercher par ' + filter.label.toLocaleLowerCase()"
         (click)="setCurrentSelected(filter.label)"
-        class="text-nowrap py-2 px-3 text-start rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700">
-        {{filter.label}}
+        class="text-nowrap py-2 px-3 text-start outline-2 outline-blue-500 text-sm hover:bg-blue-50 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700">
+        {{ filter.label }}
       </button>
     </div>
   </div>

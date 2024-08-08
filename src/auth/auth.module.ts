@@ -4,6 +4,7 @@ import { LoginComponent } from "./components/login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import { AuthComponent } from './views/auth/auth.component';
 import {RouterOutlet} from "@angular/router";
+import {AppModule} from "../app/app.module";
 
 @NgModule({
   declarations: [LoginComponent, AuthComponent],

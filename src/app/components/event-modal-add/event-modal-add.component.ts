@@ -6,14 +6,13 @@ import {
   FormGroup, NgForm,
   Validators,
 } from '@angular/forms';
-import { ScheduleService } from '../../services/schedule-service/schedule.service';
-import { BotService } from '../../services/bot-service/bot.service';
-import { scheduled } from 'rxjs';
+import { ScheduleService } from '../../services/./schedule/schedule.service';
 import {
   getFormControl,
   hasControlError,
   isControlInvalid,
 } from 'src/tools/reactive-form-tools';
+import {GuildService} from "../../services/guild/guild.service";
 
 @Component({
   selector: 'app-event-modal-add',
@@ -72,11 +71,11 @@ export class EventModalAddComponent implements OnInit {
   }
 
   constructor(
-    private botService: BotService,
     private scheduleService: ScheduleService,
+    private guildService: GuildService
   ) {
-    botService.getBot().subscribe({
-      next: (bot) => (this.servers = bot.servers),
+    guildService.findAll().subscribe({
+      next: (servers) => (this.servers = servers),
       error: (e) => console.log(e),
     });
   }

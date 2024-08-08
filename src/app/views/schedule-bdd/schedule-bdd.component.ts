@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
-import { ScheduleService } from 'src/app/services/schedule-service/schedule.service';
+import { ScheduleService } from 'src/app/services/schedule/schedule.service';
 import { Observable, of } from 'rxjs';
 import {FilterType} from "../../components/search-bar/search-bar.component";
 
