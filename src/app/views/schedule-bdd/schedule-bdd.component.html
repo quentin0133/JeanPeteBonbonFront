@@ -6,7 +6,8 @@
           class="border rounded-lg divide-y divide-gray-200 dark:border-gray-700 dark:divide-gray-700"
           [ngClass]="(schedules | async)?.length ? '' : 'pb-6'"
         >
-          <h1 class="!m-0 px-4 py-2">Gestion des évènements</h1>
+          <h1 class="px-4 py-3 text-2xl font-bold">Gestion des évènements</h1>
+          <hr class="border-gray-400 dark:border-gray-800">
           <div class="flex gap-x-5 py-4 px-4">
             <app-search-bar [filters]="filters"></app-search-bar>
             <button
@@ -147,8 +148,7 @@
                         <ng-container
                           *ngFor="let date of schedule.dates; let last = last"
                         >
-                          {{ date | date: "dd MMMM yyyy"
-                          }}<ng-container *ngIf="!last"><br /></ng-container>
+                          {{ date | date: "dd MMMM yyyy" }}<ng-container *ngIf="!last"><br /></ng-container>
                         </ng-container>
                       </div>
                     </td>
@@ -159,8 +159,7 @@
                         <ng-container
                           *ngFor="let time of schedule.times; let last = last"
                         >
-                          {{ time | date: "hh:mm"
-                          }}<ng-container *ngIf="!last"><br /></ng-container>
+                          {{ time }}<ng-container *ngIf="!last"><br /></ng-container>
                         </ng-container>
                       </div>
                     </td>

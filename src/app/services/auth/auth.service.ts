@@ -20,7 +20,8 @@ export class AuthService {
   }
 
   get currentToken(): string | undefined {
-    return this.currentResponse.value?.accessToken
+    console.log(this.currentResponse.value)
+    return this.currentResponse.value?.token
   }
 
   get isLogged(): boolean {

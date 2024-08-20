@@ -7,7 +7,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TrollMessageBDDComponent } from './views/troll-message-bdd/troll-message-bdd.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { HomeComponent } from './views/home/home.component';
@@ -36,6 +36,7 @@ import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { AuthModule } from '../auth/auth.module';
 import { MatSelectModule } from "@angular/material/select";
 import { ObsWithStatusPipe } from './pipes/obs-with-status/obs-with-status.pipe';
+import {AuthInterceptor} from "../interceptor/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -78,7 +79,10 @@ import { ObsWithStatusPipe } from './pipes/obs-with-status/obs-with-status.pipe'
         ReactiveFormsModule,
         NgOptimizedImage,
     ],
-  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'fr-FR' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

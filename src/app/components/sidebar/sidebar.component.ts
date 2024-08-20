@@ -19,5 +19,9 @@ export class SidebarComponent {
     });
   }
 
+  hasRoute(...routes: string[]): boolean {
+    return routes.includes(this.currentRoute);
+  }
+
   logout = () => this.authService.logout();
 }
