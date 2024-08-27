@@ -11,12 +11,15 @@ import { environment } from '../../../environments/environment';
 export class ScheduleService {
   private ENDPOINT = `${environment.API_URL}/schedules`;
   private schedulesSubject: BehaviorSubject<Schedule[]> = new BehaviorSubject<Schedule[]>([]);
-  public schedulesItems = this.schedulesSubject.asObservable();
 
   constructor(
     private toast: HotToastService,
     private http: HttpClient,
   ) {}
+
+  getSchedules() {
+    return this.schedulesSubject.asObservable();
+  }
 
   findAll() {
     this.http.get<Schedule[]>(this.ENDPOINT).subscribe(schedules => this.schedulesSubject.next(schedules));
@@ -25,10 +28,6 @@ export class ScheduleService {
   findByQuery(searchLabel: string, searchElement: string) {
     this.http.get<Schedule[]>(`${this.ENDPOINT}?${searchLabel}_like=${searchElement}`)
       .subscribe(schedules => this.schedulesSubject.next(schedules));
-  }
-
-  findById(id: number): Observable<Schedule> {
-    return this.http.get<Schedule>(`${this.ENDPOINT}/${id}`);
   }
 
   save(schedule: Schedule): Observable<Schedule> {

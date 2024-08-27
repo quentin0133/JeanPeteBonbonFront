@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule/schedule.service';
-import { Observable, of } from 'rxjs';
-import {FilterType} from "../../components/search-bar/search-bar.component";
+import { catchError, map, Observable, of, startWith } from 'rxjs';
+import { FilterType } from "../../components/search-bar/search-bar.component";
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -40,7 +40,7 @@ export class ScheduleBDDComponent {
   ];
 
   constructor(private scheduleService: ScheduleService) {
-    this.schedules = this.scheduleService.schedulesItems;
+    this.schedules = this.scheduleService.getSchedules();
     this.scheduleService.findAll();
   }
 
@@ -113,4 +113,5 @@ export class ScheduleBDDComponent {
   }
 
   protected readonly String = String;
+  protected readonly console = console;
 }

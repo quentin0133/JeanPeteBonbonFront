@@ -35,7 +35,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { AuthModule } from '../auth/auth.module';
 import { MatSelectModule } from "@angular/material/select";
-import { ObsWithStatusPipe } from './pipes/obs-with-status/obs-with-status.pipe';
+import { LoadingStatePipe } from './pipes/loading-state/loading-state.pipe';
 import {AuthInterceptor} from "../interceptor/auth.interceptor";
 
 @NgModule({
@@ -53,7 +53,7 @@ import {AuthInterceptor} from "../interceptor/auth.interceptor";
     TruncatePipe,
     EventModalAddComponent,
     SearchBarComponent,
-    ObsWithStatusPipe
+    LoadingStatePipe
   ],
     imports: [
         BrowserModule,

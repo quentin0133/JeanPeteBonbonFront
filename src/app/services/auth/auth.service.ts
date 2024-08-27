@@ -20,7 +20,6 @@ export class AuthService {
   }
 
   get currentToken(): string | undefined {
-    console.log(this.currentResponse.value)
     return this.currentResponse.value?.token
   }
 

@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import {Observable, catchError, throwError, delay} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from '../app/services/auth/auth.service';
@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((err) => {
-        console.log(err);
+        console.error(err);
         if (err.status === 401) {
           this.toast.error('Session expiré, veuillez vous reconnecter');
           this.service.logout();

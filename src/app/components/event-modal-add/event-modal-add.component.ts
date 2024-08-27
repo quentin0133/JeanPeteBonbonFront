@@ -47,11 +47,9 @@ export class EventModalAddComponent implements OnInit {
   });
 
   get serversSelected() {
-    return this.servers.filter((server) =>
-      {
+    return this.servers.filter((server) => {
         return this.serversId?.value.includes(server.id)
-      }
-    );
+    });
   }
 
   get serversId(): AbstractControl<any, any> | null {
@@ -72,7 +70,7 @@ export class EventModalAddComponent implements OnInit {
 
   constructor(
     private scheduleService: ScheduleService,
-    private guildService: GuildService
+    guildService: GuildService
   ) {
     guildService.findAll().subscribe({
       next: (servers) => (this.servers = servers),
