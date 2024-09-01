@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor,
+  HttpInterceptor, HttpErrorResponse,
 } from '@angular/common/http';
 import {Observable, catchError, throwError, delay} from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,20 +18,20 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(
-    request: HttpRequest<unknown>,
+    request: HttpRequest<any>,
     next: HttpHandler,
-  ): Observable<HttpEvent<unknown>> {
+  ): Observable<HttpEvent<any>> {
     const token = this.service.currentToken;
     if (token && request.url.startsWith(environment.API_URL)) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
       });
     }
 
     return next.handle(request).pipe(
-      catchError((err) => {
+      catchError((err: HttpErrorResponse) => {
         console.error(err);
         if (err.status === 401) {
           this.toast.error('Session expiré, veuillez vous reconnecter');

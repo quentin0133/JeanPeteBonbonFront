@@ -119,13 +119,6 @@
               </tr>
               <ng-container *ngIf="!schedulesState.loading">
                 <tr
-                  class="mx-auto bg-blue-200 dark:bg-blue-900"
-                >
-                  <td class="py-4" colspan="100">
-                    {{ schedulesState.data?.length }}
-                  </td>
-                </tr>
-                <tr
                   *ngIf="schedulesState.error"
                   class="mx-auto text-red-500 bg-blue-200 dark:bg-blue-900"
                 >
