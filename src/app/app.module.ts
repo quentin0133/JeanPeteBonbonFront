@@ -7,7 +7,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TrollMessageBDDComponent } from './views/troll-message-bdd/troll-message-bdd.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { HomeComponent } from './views/home/home.component';
@@ -23,9 +23,9 @@ import {
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
 } from '@angular-material-components/datetime-picker';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import * as fr from '@angular/common/locales/fr';
-import {NgOptimizedImage, registerLocaleData} from '@angular/common';
+import { NgOptimizedImage, registerLocaleData } from '@angular/common';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
@@ -34,9 +34,10 @@ import { EventModalAddComponent } from './components/event-modal-add/event-modal
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { AuthModule } from '../auth/auth.module';
-import { MatSelectModule } from "@angular/material/select";
+import { MatSelectModule } from '@angular/material/select';
 import { LoadingStatePipe } from './pipes/loading-state/loading-state.pipe';
-import {AuthInterceptor} from "../interceptor/auth.interceptor";
+import { HeaderInterceptor } from '../interceptor/header/interceptor/header.interceptor.service';
+import {ErrorInterceptor} from "../interceptor/error/interceptor/error.interceptor.service";
 
 @NgModule({
   declarations: [
@@ -53,35 +54,36 @@ import {AuthInterceptor} from "../interceptor/auth.interceptor";
     TruncatePipe,
     EventModalAddComponent,
     SearchBarComponent,
-    LoadingStatePipe
+    LoadingStatePipe,
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        NgxMatDatetimePickerModule,
-        MatMenuModule,
-        MatIconModule,
-        MatMomentDateModule,
-        MatCardModule,
-        NgxMatNativeDateModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        NgxMultipleDatesModule,
-        AuthModule,
-        FormsModule,
-        MatInputModule,
-        HttpClientModule,
-        HotToastModule.forRoot({
-            theme: 'snackbar',
-        }),
-        AppRoutingModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        NgOptimizedImage,
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    NgxMatDatetimePickerModule,
+    MatMenuModule,
+    MatIconModule,
+    MatMomentDateModule,
+    MatCardModule,
+    NgxMatNativeDateModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    NgxMultipleDatesModule,
+    AuthModule,
+    FormsModule,
+    MatInputModule,
+    HttpClientModule,
+    HotToastModule.forRoot({
+      theme: 'snackbar',
+    }),
+    AppRoutingModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    NgOptimizedImage,
+  ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

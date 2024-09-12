@@ -57,14 +57,12 @@
             <tr>
               <th class="py-3 px-4 pe-0" scope="col">
                 <div class="flex items-center h-5">
-                  <input
-                    (click)="onChangeAllCheckbox($event)"
-                    [checked]="
+                  <input *ngIf="schedules | async as s"
+                    (click)="onChangeAllCheckbox($event, s)"
+                    [checked]="s.length &&
                         idSchedulesChecked.length ==
-                          (schedules | async)?.length &&
-                        ((schedules | async)?.length || false) > 0
-                      "
-                    [disabled]="(schedules | async)?.length === 0"
+                          s.length"
+                    [disabled]="!s.length"
                     class="w-4 h-4 border-gray-200 rounded text-gray-600 focus:ring-blue-500 dark:bg-blue-800 dark:border-gray-700 dark:checked:bg-blue-500 disabled:hover:cursor-not-allowed dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                     id="hs-table-pagination-checkbox-all"
                     title="Sélectionner tous les éléments"
@@ -113,7 +111,7 @@
                   colspan="100"
                 >
                   <div class="animate-spin inline-block size-6 border-solid border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
-                    <span class="sr-only">Loading...</span>
+                    <span class="sr-only">Chargement...</span>
                   </div>
                 </td>
               </tr>

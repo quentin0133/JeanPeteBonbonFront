@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Schedule } from 'src/app/models/schedule';
 import { ScheduleService } from 'src/app/services/schedule/schedule.service';
-import { catchError, map, Observable, of, startWith } from 'rxjs';
-import { FilterType } from "../../components/search-bar/search-bar.component";
+import { Observable, of } from 'rxjs';
+import { FilterType } from '../../components/search-bar/search-bar.component';
 
 @Component({
   selector: 'app-schedule-bdd',
@@ -18,25 +18,25 @@ export class ScheduleBDDComponent {
 
   filters: FilterType[] = [
     {
-      label: "Id",
-      variable: "id",
-      type: "number"
+      label: 'Id',
+      variable: 'id',
+      type: 'number',
     },
     {
-      label: "Message",
-      variable: "message",
-      type: "string"
+      label: 'Message',
+      variable: 'message',
+      type: 'string',
     },
     {
-      label: "Date",
-      variable: "dates",
-      type: "date"
+      label: 'Date',
+      variable: 'dates',
+      type: 'date',
     },
     {
-      label: "Temps",
-      variable: "times",
-      type: "time"
-    }
+      label: 'Temps',
+      variable: 'times',
+      type: 'time',
+    },
   ];
 
   constructor(private scheduleService: ScheduleService) {
@@ -44,9 +44,9 @@ export class ScheduleBDDComponent {
     this.scheduleService.findAll();
   }
 
-  onChangeAllCheckbox(event: any): void {
-    console.error("A")
-    if (event.target?.checked) this.addAllScheduleSelected();
+  onChangeAllCheckbox(event: any, all: Schedule[]): void {
+    console.error('A');
+    if (event.target?.checked) this.addAllScheduleSelected(all);
     else this.clearSelection();
   }
 
@@ -95,10 +95,8 @@ export class ScheduleBDDComponent {
     this.idSchedulesChecked.splice(this.idSchedulesChecked.indexOf(id), 1);
   }
 
-  addAllScheduleSelected(): void {
-    this.schedules.subscribe((schedules) => {
-      this.idSchedulesChecked = schedules.map((schedule) => schedule.id);
-    });
+  addAllScheduleSelected(all: Schedule[]): void {
+    this.idSchedulesChecked = all.map((schedule) => schedule.id);
   }
 
   clearSelection(): void {

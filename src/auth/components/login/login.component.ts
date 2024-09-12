@@ -38,13 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.startBackgroundCaroussel();
-    this.authService.ping().subscribe({
-      error: err => {
-        if (err.status === 0)
-          this.toast.error("Le serveur ne répond plus");
-        return err;
-      }
-    })
+    this.authService.ping().subscribe();
   }
 
   ngOnDestroy(): void {

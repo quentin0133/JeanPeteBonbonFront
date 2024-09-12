@@ -10,7 +10,9 @@ import { environment } from '../../../environments/environment';
 })
 export class ScheduleService {
   private ENDPOINT = `${environment.API_URL}/schedules`;
-  private schedulesSubject: BehaviorSubject<Schedule[]> = new BehaviorSubject<Schedule[]>([]);
+  private schedulesSubject: BehaviorSubject<Schedule[]> = new BehaviorSubject<
+    Schedule[]
+  >([]);
 
   constructor(
     private toast: HotToastService,
@@ -22,21 +24,26 @@ export class ScheduleService {
   }
 
   findAll() {
-    this.http.get<Schedule[]>(this.ENDPOINT).subscribe(schedules => this.schedulesSubject.next(schedules));
+    this.http.get<Schedule[]>(this.ENDPOINT).subscribe({
+      next: (schedules) => this.schedulesSubject.next(schedules),
+    });
   }
 
   findByQuery(searchLabel: string, searchElement: string) {
-    this.http.get<Schedule[]>(`${this.ENDPOINT}?${searchLabel}_like=${searchElement}`)
-      .subscribe(schedules => this.schedulesSubject.next(schedules));
+    this.http
+      .get<Schedule[]>(`${this.ENDPOINT}?${searchLabel}_like=${searchElement}`)
+      .subscribe((schedules) => this.schedulesSubject.next(schedules));
   }
 
   save(schedule: Schedule): Observable<Schedule> {
-    return this.http.post<Schedule>(this.ENDPOINT, schedule)
-      .pipe(this.toast.observe({
+    return this.http.post<Schedule>(this.ENDPOINT, schedule).pipe(
+      this.toast.observe({
         loading: "Ajout de l'évèment en cours...",
         error: "Erreur, l'évènement n'a pas pu être ajouter !",
-        success: response => `L'évènement n°${response.id} a été ajouter avec succès !`
-      }));
+        success: (response) =>
+          `L'évènement n°${response.id} a été ajouter avec succès !`,
+      }),
+    );
   }
 
   update(schedule: Schedule): Observable<Schedule> {
@@ -44,11 +51,13 @@ export class ScheduleService {
   }
 
   delete(id: number): Observable<boolean> {
-    return this.http.delete<boolean>(`${this.ENDPOINT}/${id}`)
-      .pipe(this.toast.observe({
+    return this.http.delete<boolean>(`${this.ENDPOINT}/${id}`).pipe(
+      this.toast.observe({
         loading: "Suppression de l'évènement en cours...",
         error: "Erreur, l'évènement n°${id} n'a pas pu le supprimer !",
-        success: response => `L'évènement n°${id} a été supprimé avec succès !`
-      }));
+        success: (response) =>
+          `L'évènement n°${id} a été supprimé avec succès !`,
+      }),
+    );
   }
 }

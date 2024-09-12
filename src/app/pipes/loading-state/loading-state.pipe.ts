@@ -1,24 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {catchError, delay, map, Observable, of, startWith} from "rxjs";
+import { catchError, delay, map, Observable, of, startWith } from 'rxjs';
 
-interface LoadingState<T = unknown> {
+interface LoadingState<T> {
   loading: boolean;
   data?: T;
   error?: Error;
 }
 
 @Pipe({
-  name: 'loadingState'
+  name: 'loadingState',
 })
 export class LoadingStatePipe implements PipeTransform {
-
-  transform<T = any>(val: Observable<any>): Observable<LoadingState<T>> {
+  transform<T>(val: Observable<T>): Observable<LoadingState<T>> {
     return val.pipe(
-      delay(2000),
       map((data) => ({ loading: false, data })),
       startWith({ loading: true }),
-      catchError((error) => of({ loading: false, error }))
+      catchError((error) => of({ loading: false, error })),
     );
   }
-
 }
