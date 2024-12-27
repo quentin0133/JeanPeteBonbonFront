@@ -5,11 +5,12 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 import { ScheduleService } from '../../services/./schedule/schedule.service';
 
 export interface FilterType {
@@ -23,7 +24,7 @@ export interface FilterType {
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
 })
-export class SearchBarComponent implements OnInit, AfterViewChecked {
+export class SearchBarComponent implements OnInit, AfterViewChecked, OnDestroy {
   private readonly debounceTimeMs = 400;
 
   private searchSubject = new Subject<string>();
@@ -43,6 +44,8 @@ export class SearchBarComponent implements OnInit, AfterViewChecked {
 
   isDropdownOpen: boolean = false;
 
+  private subscription: Subscription = new Subscription();
+
   currentFilterSelected: FilterType = {
     label: '',
     type: 'text',
@@ -56,17 +59,21 @@ export class SearchBarComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.searchBar.nativeElement.style.paddingInlineEnd =
-      (this.dropdown.nativeElement.clientWidth + 8) + 'px';
+      this.dropdown.nativeElement.clientWidth + 8 + 'px';
   }
 
   ngOnInit(): void {
     if (this.filters && this.filters?.length > 0)
       this.currentFilterSelected = this.filters[0];
-    this.searchSubject
+    this.subscription = this.searchSubject
       .pipe(debounceTime(this.debounceTimeMs))
       .subscribe((searchValue) => {
         this.search(searchValue);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onOpenDropdown(): void {
@@ -101,6 +108,6 @@ export class SearchBarComponent implements OnInit, AfterViewChecked {
     )[0].variable;
     if (searchValue || !value)
       this.scheduleService.findByQuery(value, searchValue);
-    else this.scheduleService.findAll();
+    else this.scheduleService.refresh();
   }
 }

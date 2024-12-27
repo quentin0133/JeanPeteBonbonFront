@@ -1,8 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../services/./auth/auth.service";
-import {NavigationEnd, Router} from "@angular/router";
-import {filter, map} from "rxjs";
-import {HotToastService} from "@ngneat/hot-toast";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/./auth/auth.service';
+import { NavigationEnd, Router } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +17,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) this.currentRoute = router.url;
@@ -33,7 +32,7 @@ export class SidebarComponent implements OnInit {
     this.mouseTimeOutEvent = setTimeout(() => {
       localStorage.removeItem('theme');
       this.setTheme();
-      this.hotToastService.info("Thème réglé par préférence du navigateur");
+      this.hotToastService.info('Thème réglé par préférence du navigateur');
       this.mouseTimeOutEvent = null;
     }, 3000);
   }
@@ -65,6 +64,9 @@ export class SidebarComponent implements OnInit {
   }
 
   setTheme() {
-    document.body.classList.toggle('dark', localStorage.getItem('theme') === 'dark');
+    document.body.classList.toggle(
+      'dark',
+      localStorage.getItem('theme') === 'dark',
+    );
   }
 }

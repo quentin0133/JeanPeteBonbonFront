@@ -1,18 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  concatMap,
-  delay,
-  finalize,
-  tap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { User } from '../../models/user';
 import { AuthResponse } from '../../models/auth-response';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 
 @Injectable({

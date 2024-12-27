@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { catchError, delay, EMPTY, Observable, throwError } from 'rxjs';
+import { catchError, EMPTY, Observable, throwError } from 'rxjs';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthService } from '../../../app/services/auth/auth.service';
 

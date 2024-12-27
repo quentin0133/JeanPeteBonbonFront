@@ -1,0 +1,24 @@
+<thead class="bg-[#B7CFF4] border-b dark:bg-blue-700">
+<tr>
+  <th class="w-2 py-3 px-4 pe-0" scope="col">
+    <div class="flex items-center h-5">
+      <input
+        (click)="toggleAllCheckbox.emit()"
+        (keydown.enter)="toggleAllCheckbox.emit()"
+        [checked]="allChecked"
+        [disabled]="!elements?.length"
+        class="w-4 h-4 border-gray-200 rounded text-gray-600 focus:ring-blue-500 dark:bg-blue-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+        id="checkbox-all"
+        title="Sélectionner tous les éléments"
+        type="checkbox"
+      />
+      <label class="sr-only" for="checkbox-all">Checkbox</label>
+    </div>
+  </th>
+  <th class="w-16 px-4 py-3 text-sm font-medium uppercase" scope="col">Id</th>
+  <th class="px-6 py-3 text-sm font-medium uppercase" scope="col">Message</th>
+  <th class="w-52 px-6 py-3 text-sm font-medium uppercase" scope="col">Dates</th>
+  <th class="w-36 px-6 py-3 text-sm font-medium uppercase" scope="col">Temps</th>
+  <th class="w-32 px-6 py-3 text-sm font-medium uppercase" scope="col">Action</th>
+</tr>
+</thead>

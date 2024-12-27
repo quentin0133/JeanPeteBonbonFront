@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { catchError, delay, map, Observable, of, startWith } from 'rxjs';
+import { catchError, map, Observable, of, startWith } from 'rxjs';
 
-interface LoadingState<T> {
+export interface LoadingState<T> {
   loading: boolean;
   data?: T;
   error?: Error;
@@ -15,7 +15,10 @@ export class LoadingStatePipe implements PipeTransform {
     return val.pipe(
       map((data) => ({ loading: false, data })),
       startWith({ loading: true }),
-      catchError((error) => of({ loading: false, error })),
+      catchError((error) => {
+        console.error('Erreur du backend:', error);
+        return of({ loading: false, error });
+      }),
     );
   }
 }

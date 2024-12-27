@@ -1,0 +1,152 @@
+<tbody class="border-b align-middle">
+<tr *ngIf="schedules.loading" class="mx-auto bg-blue-200">
+  <td
+    class="py-6 text-gray-600 dark:bg-blue-800 dark:text-white"
+    colspan="100"
+  >
+    <output
+      class="animate-spin inline-block size-6 border-solid border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500"
+      aria-label="loading">
+      <span class="sr-only">Chargement...</span>
+    </output>
+  </td>
+</tr>
+<ng-container *ngIf="!schedules.loading">
+  <tr
+    *ngIf="schedules.error"
+    class="bg-red-100 text-sm text-yellow-800 dark:bg-yellow-900 dark:bg-opacity-50 dark:border-yellow-900 dark:text-yellow-500"
+  >
+    <td class="py-2" colspan="100">
+      <div
+        class="p-4 flex justify-center"
+        role="alert" tabindex="-1" aria-labelledby="hs-with-description-label">
+        <div class="ms-4 flex gap-2.5">
+          <svg class="shrink-0 size-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <path d="M12 9v4"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+          <div class="text-start">
+            <h3 id="hs-with-description-label" class="text-sm font-semibold">
+              Quelque chose s'est mal passé, impossible de récupérer les données.
+            </h3>
+            <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-600">
+              {{ getError(schedules.error) }}
+            </p>
+          </div>
+          <button type="button"
+                  class="py-2 px-1 self-center flex justify-center items-center size-[24px] text-sm font-medium rounded-lg border border-transparent bg-red-800 text-white hover:bg-red-700 focus:outline-none active:bg-red-900 dark:bg-yellow-700 dark:hover:bg-yellow-600 dark:active:bg-yellow-800 disabled:opacity-50"
+                  (click)="refreshData()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                 stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr *ngIf="schedules.data?.length === 0" class="mx-auto bg-blue-200 dark:bg-blue-900">
+    <td class="py-4" colspan="100">Aucune donnée trouvée</td>
+  </tr>
+  <tr *ngFor="let schedule of schedules?.data; let index = index"
+      [className]="index % 2 === 0 ? 'bg-blue-50 dark:bg-blue-900' : 'bg-blue-100 dark:bg-[#214296]'">
+    <td class="py-2 ps-4 align-middle">
+      <div class="flex items-center h-5">
+        <input
+          (change)="onChangeCheckbox(schedule.id)"
+          [checked]="isChecked(schedule.id)"
+          class="w-4 h-4 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-blue-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+          id="hs-table-pagination-checkbox-1"
+          title="Sélectionner l'élément"
+          type="checkbox"
+        />
+        <label
+          class="sr-only"
+          for="hs-table-pagination-checkbox-1"
+        >
+          Checkbox
+        </label>
+      </div>
+    </td>
+    <td
+      class="px-2 py-2 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200 align-middle"
+    >
+      <p>{{ schedule.id }}</p>
+    </td>
+    <td
+      class="px-6 py-2 text-md text-gray-800 dark:text-gray-200 align-middle"
+    >
+      <p>{{ schedule.message | truncate: 92 }}</p>
+    </td>
+    <td
+      class="px-6 py-2 whitespace-nowrap text-md text-gray-800 dark:text-gray-200 align-middle"
+    >
+      <div class="max-h-[4rem] overflow-y-auto snap-y [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-blue-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-blue-700 dark:[&::-webkit-scrollbar-thumb]:bg-blue-500 rounded-md px-2 py-1"
+          [ngClass]="schedule.dates.length > 2 ? 'bg-opacity-10 bg-blue-300 dark:bg-opacity-15 dark:bg-blue-500' : ''">
+        <p *ngFor="let date of schedule.dates; let last = last">
+          {{ date | date: "dd MMMM yyyy" }}
+        </p>
+      </div>
+    </td>
+    <td
+      class="px-6 py-4 whitespace-nowrap text-md text-gray-800 dark:text-gray-200 align-middle"
+    >
+      <div
+        class="overflow-y-auto max-h-[4rem] snap-y [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-blue-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-blue-700 dark:[&::-webkit-scrollbar-thumb]:bg-blue-500 rounded-md px-2 py-1"
+        [ngClass]="schedule.times.length > 2 ? 'bg-opacity-10 bg-blue-300 dark:bg-opacity-15 dark:bg-blue-500' : ''"
+      >
+        <p *ngFor="let time of schedule.times; let last = last">
+          {{ time }}
+        </p>
+      </div>
+    </td>
+    <td class="px-6 py-2 whitespace-nowrap text-md font-medium align-middle">
+      <button
+        class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent hover:text-blue-400 focus:text-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-red-400 dark:focus:outline-blue-500 dark:focus:ring-1 dark:focus:ring-blue-600"
+        title="Modifier"
+        type="button"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button
+        (click)="onWantDeleteById(schedule.id)"
+        class="inline-flex items-center gap-x-2 text-md font-semibold rounded-lg border border-transparent hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-300 dark:hover:text-red-400"
+        title="Supprimer"
+        type="button"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </td>
+  </tr>
+</ng-container>
+</tbody>

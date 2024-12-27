@@ -12,7 +12,6 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
 import { HotToastModule } from '@ngneat/hot-toast';
 import { HomeComponent } from './views/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ElementBDDComponent } from './components/element-bdd/element-bdd.component';
 import { ScheduleBDDComponent } from './views/schedule-bdd/schedule-bdd.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,14 +29,17 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { MatCardModule } from '@angular/material/card';
 import { TimePickerComponent } from './components/time-picker/time-picker.component';
-import { EventModalAddComponent } from './components/event-modal-add/event-modal-add.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { AuthModule } from '../auth/auth.module';
 import { MatSelectModule } from '@angular/material/select';
 import { LoadingStatePipe } from './pipes/loading-state/loading-state.pipe';
 import { HeaderInterceptor } from '../interceptor/header/interceptor/header.interceptor.service';
-import {ErrorInterceptor} from "../interceptor/error/interceptor/error.interceptor.service";
+import { ErrorInterceptor } from '../interceptor/error/interceptor/error.interceptor.service';
+import { TheaderComponent } from './components/table/theader/theader.component';
+import { TbodyComponent } from './components/table/tbody/tbody.component';
+import { EventModalDeleteComponent } from './components/modals/event-modal-delete/event-modal-delete.component';
+import { EventModalAddComponent } from './components/modals/event-modal-add/event-modal-add.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,6 @@ import {ErrorInterceptor} from "../interceptor/error/interceptor/error.intercept
     TrollMessageBDDComponent,
     PageNotFoundComponent,
     HomeComponent,
-    ElementBDDComponent,
     ScheduleBDDComponent,
     DatePickerComponent,
     TimePickerComponent,
@@ -55,6 +56,10 @@ import {ErrorInterceptor} from "../interceptor/error/interceptor/error.intercept
     EventModalAddComponent,
     SearchBarComponent,
     LoadingStatePipe,
+    TheaderComponent,
+    TbodyComponent,
+    EventModalDeleteComponent,
+    EventModalAddComponent,
   ],
   imports: [
     BrowserModule,

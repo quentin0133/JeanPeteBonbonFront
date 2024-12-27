@@ -1,18 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Guild } from '../../models/guild';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Guild } from 'src/app/models/guild';
 import {
   AbstractControl,
   FormControl,
-  FormGroup, NgForm,
+  FormGroup,
   Validators,
 } from '@angular/forms';
-import { ScheduleService } from '../../services/./schedule/schedule.service';
+import { ScheduleService } from 'src/app/services/./schedule/schedule.service';
 import {
   getFormControl,
   hasControlError,
   isControlInvalid,
 } from 'src/tools/reactive-form-tools';
-import {GuildService} from "../../services/guild/guild.service";
+import { GuildService } from 'src/app/services/guild/guild.service';
 
 @Component({
   selector: 'app-event-modal-add',
@@ -48,7 +48,7 @@ export class EventModalAddComponent implements OnInit {
 
   get serversSelected() {
     return this.servers.filter((server) => {
-        return this.serversId?.value.includes(server.id)
+      return this.serversId?.value.includes(server.id);
     });
   }
 
@@ -70,7 +70,7 @@ export class EventModalAddComponent implements OnInit {
 
   constructor(
     private scheduleService: ScheduleService,
-    guildService: GuildService
+    guildService: GuildService,
   ) {
     guildService.findAll().subscribe({
       next: (servers) => (this.servers = servers),
@@ -88,11 +88,8 @@ export class EventModalAddComponent implements OnInit {
         ? this.scheduleService.update(this.form.value)
         : this.scheduleService.save(this.form.value)
       ).subscribe({
-        next: _ => {
-          this.scheduleService.findAll();
-          this.close();
-        },
-        error: e => console.log(e),
+        next: (_) => this.close(),
+        error: (e) => console.log(e),
       });
       this.close();
     }

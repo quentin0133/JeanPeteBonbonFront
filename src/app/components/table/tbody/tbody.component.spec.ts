@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ElementBDDComponent } from './element-bdd.component';
+import { TbodyComponent } from './tbody.component';
 
-describe('ElementBDDComponent', () => {
-  let component: ElementBDDComponent;
-  let fixture: ComponentFixture<ElementBDDComponent>;
+describe('TbodyComponent', () => {
+  let component: TbodyComponent;
+  let fixture: ComponentFixture<TbodyComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ElementBDDComponent ]
+      declarations: [ TbodyComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ElementBDDComponent);
+    fixture = TestBed.createComponent(TbodyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
